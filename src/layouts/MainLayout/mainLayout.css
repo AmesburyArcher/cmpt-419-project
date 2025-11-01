@@ -1,0 +1,18 @@
+.main-layout {
+    @apply flex flex-col h-screen;
+}
+
+.layout-header,
+.layout-footer {
+    @apply w-full;
+}
+
+.layout-body {
+    @apply flex-1 w-full overflow-y-auto;
+    min-height: 0;
+}
+
+.content-max-width {
+    @apply max-w-[1600px] w-full;
+    margin: 0 auto;
+}

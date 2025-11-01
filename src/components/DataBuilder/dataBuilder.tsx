@@ -15,8 +15,7 @@ export function DataBuilder() {
     setProgress("Starting...");
 
     try {
-      // Build dataset for 2024 season, weeks 1-18
-      const season = 2023;
+      const season = 2024;
       const startWeek = 1;
       const endWeek = 18;
 
