@@ -1,86 +1,77 @@
-NFL Market vs. Model: An Educational Sports Betting Analyzer (Front-End + Client-Side AI)
+NFL Market vs. Model: A Sports Betting Analyzer (Front-End + Client-Side AI)
 
-Track: Mix of 5.0.1 (Tools & Interfaces for Human/Data-Centered AI) + 5.0.2 (ML with Data Exploration)
+Track: Mix of 5.0.1 + 5.0.2 
 
-Student: Max Corazza
+Group Members: Max Corazza
 
-Stack: Vite + React, TypeScript, TailwindCSS, ShadCN, TensorFlow.js (client-side), Web Workers (potentially)
+Stack: Vite + React, TypeScript, TailwindCSS, ShadCN, TensorFlow.js (client-side), Potential integration with an LLM for more detailed analysis of client-side ML model.
 
-1) Motivation & Problem
+1) Motivation 
 
-Sports betting markets encode collective beliefs about NFL game outcomes, but those beliefs aren’t directly legible to learners: Are market probabilities calibrated? What happens to bankroll risk under simple strategies? Do transparent features (rest days, rolling form, spreads) add signal?
-This project delivers an interactive web app that makes these questions explorable through human-centered visualizations and a tiny, explainable, on-device model.
+I've always been really into sports, especially the NFL and since I am a front-end developer I figured this would be the perfect idea for a project as it mixes in my passion for sports, as well as being able to use my front-end experience to build a nice webapp.
+Sports betting has recently gotten extremely popular and sports itself has been evolving in recent years to be very analytical, with plenty of data available. Given this, I'd really want to see how a relatively simple machine learning model can predict NFL match wins.
+The goal is to provide an analysis to help someone make an informed decision with the help of ML and LLMs (LLM time dependent).
 
-2) Objectives (What the tool will enable)
+2) Objectives 
 
-Convert odds to probabilities and remove the bookmaker’s “vig” for fair comparisons.
+Convert odds to probabilities.
 
-Train a tiny client-side model (logistic regression or 1-hidden-layer MLP via TF.js) to predict home win probability from selected features.
+Train a tiny client-side model (logistic regression most likely via TF.js) to predict home win probability from selected features.
 
 Compare market vs. model vs. blends using calibration (reliability curves), Brier score, expected value (EV), and risk (bankroll simulation with flat/kelly).
 
-Explore CLV (closing line value) and line movement to understand market dynamics.
-
-Human-in-the-loop feature selection: a Feature Panel lets users toggle features and instantly see how performance and risk change.
+Human-in-the-loop feature selection: a Feature Panel lets users toggle features and instantly see how performance and risk change. Would also like to provide a feature that allows users to input past games and see what the model predicts and how it compares to actual result so they
+can see how the model performs in order to keep users fully aware of risks.
 
 3) Relevance to Course Themes
 
-Human-centered AI: interactive dashboards surface calibration, uncertainty, and risk rather than opaque “picks.”
+Human-centered AI: interactive dashboards surface calibration, uncertainty, and risk for predictions. Allow viewing of past results to understand model performance. Remaining fully transparent on the algorithms used to determine predictions and provide disclaimers.
 
-Data-centric AI: emphasizes data quality, de-vigging, slice analysis, and calibration over complex models.
-
-Responsible framing: educational, transparent math, clear limits and disclaimers.
+Data-centric AI: emphasizes data quality, and calibration over complex models.
 
 4) Data & Assumptions
 
-User-supplied CSV of NFL games (or included synthetic demo CSV).
+User-supplied CSV of NFL games. Time-dependent may provide a pre-set set of data available through api.
 
-Minimal schema per row: season, week, date, home_team, away_team, scores, moneylines (open/close), spread/total (optional), rest days, rolling form (prev 5), divisional/Thursday/international flags, travel miles, home_win.
+Schema per row: season, week, date, home_team, away_team, scores, moneylines (open/close), spread/total (optional), rest days, rolling form (prev 5), divisional/Thursday/international flags, travel miles, home_win, etc...
 
-The app computes implied probabilities, de-vig normalization, EV, calibration buckets, bankroll paths, CLV.
+The app computes implied probabilities, de-vig normalization (removing the bookies guaranteed profit over long run), EV, potentially more depending on time.
 
-5) Methods (Lightweight & Browser-Friendly)
+5) Methods (browser-friendly)
 
-Implied probability (moneyline → decimal → p):
-if ml>0: dec=1+ml/100; else dec=1+100/|ml|; p_raw=1/dec.
-De-vig (2-way): p1 = p1_raw / (p1_raw + p2_raw); p2 = 1−p1.
+Implied probabilities & de-vig.
 
-Model: logistic regression (TF.js) as default; optional tiny MLP. Time-aware split (train on early weeks, validate on later).
+Model: logistic regression TF.js; features include spread/total, rolling form (last 3/5/10), rest days, divisional/Thursday/international flags, travel miles, home/away indicator.
 
-Calibration: 10 equal-width probability bins; Reliability curve; Brier score mean((p−y)^2).
+Calibration: 10 probability bins; reliability curve + Brier.
 
-EV: EV = p_fair * (decimal−1) − (1−p_fair) for each option; compare market vs. model vs. blend p* = α·p_model + (1−α)·p_market.
+EV & bankroll.
 
-Bankroll simulation: flat unit vs. fractional Kelly f* = (b·p − (1−p))/b, b=decimal−1; visualize equity & drawdown.
+CLV: compare user odds vs. closing odds; show distribution and correlation with realized outcomes.
 
-CLV: compare personal odds vs. closing odds; show CLV distribution and correlation with realized profit.
-
-6) Feature Panel (Human-in-the-Loop Controls)
+6) Feature Panel
 
 Toggles: spread, total, home/away indicator, divisional flag, Thursday/intl game, travel miles.
 
-Parameters: rolling window size (3/5/10), rest-day bucketing, model choice (logistic vs. tiny MLP), blend α slider.
+Parameters: rolling window size (3/5/10), rest-day bucketing, model choice (time dependent).
 
-Instant feedback: retrain on the fly in a Web Worker; update calibration, Brier, EV table, bankroll curve live.
+Feedback: provide analysis from model and potential conversation with llm to provide deeper analysis or summary of data provided.
 
 7) Deliverables
 
 Working SPA (GitHub repo).
 
-Demo with included synthetic CSV (≤ 25k rows stays responsive).
+Demo with included CSV 
 
 Short readme/report: screenshots + interpretations (what calibration/CLV revealed, limitations).
-
-(Optional) Export: one-pager PDF with current slice (calibration, EV, bankroll).
 
 8) Evaluation & Success Criteria
 
 Loads CSV, infers schema, handles missingness gracefully.
 
-Trains client-side model; renders reliability curve + Brier score.
+Trains client-side model.
 
 Shows EV table, bankroll equity/drawdown, and CLV distribution.
 
 Feature toggles visibly change calibration/EV/risk, demonstrating data-centric thinking.
 
-App remains smooth (no main-thread jank) via Workers and sampling.

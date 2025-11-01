@@ -1,0 +1,150 @@
+import { useState } from "react";
+import * as tf from "@tensorflow/tfjs";
+import { LogisticRegressionModel } from "@/models/LogisticRegressionModel.model.ts";
+import { NflGameInterface } from "@/interfaces/nflGame.interface.ts";
+import { parseCSV } from "@/utils/parsing.utils.ts";
+import { prepareFeatures } from "@/utils/features.utils.ts";
+import { calculateCalibration } from "@/utils/model.utils.ts";
+
+interface FileUploadProps {
+  onDataLoaded: (games: NflGameInterface[]) => void;
+  onModelTrained: (model: LogisticRegressionModel, metrics: any) => void;
+  selectedFeatures: string[];
+  isTraining: boolean;
+  setIsTraining: (training: boolean) => void;
+}
+
+export function FileUpload({
+  onDataLoaded,
+  onModelTrained,
+  selectedFeatures,
+  isTraining,
+  setIsTraining,
+}: FileUploadProps) {
+  const [fileName, setFileName] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setError("");
+      setFileName(file.name);
+
+      // Parse CSV
+      const games = await parseCSV(file);
+      console.log(`Loaded ${games.length} games`);
+
+      onDataLoaded(games);
+
+      // Auto-train model
+      await trainModel(games);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load file");
+    }
+  };
+
+  const trainModel = async (games: NflGameInterface[]) => {
+    setIsTraining(true);
+
+    try {
+      // Prepare data
+      const { X, y, featureNames } = prepareFeatures(games, selectedFeatures);
+
+      // Train model
+      const model = new LogisticRegressionModel();
+      await model.train(X, y, featureNames, 100);
+
+      // Calculate metrics
+      const predictions = model.predict(X) as tf.Tensor;
+      const predData = Array.from(await predictions.data());
+      const yData = Array.from(await y.data());
+
+      // Brier score
+      const brierScore =
+        predData.reduce(
+          (sum, pred, i) => sum + Math.pow(pred - yData[i], 2),
+          0,
+        ) / predData.length;
+
+      // Accuracy
+      const accuracy =
+        predData.filter((pred, i) => (pred > 0.5 ? 1 : 0) === yData[i]).length /
+        predData.length;
+
+      // Calibration
+      const calibrationData = calculateCalibration(predData, yData, 10);
+
+      onModelTrained(model, {
+        brierScore,
+        accuracy,
+        calibrationData,
+      });
+
+      // Cleanup
+      X.dispose();
+      y.dispose();
+      predictions.dispose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Training failed");
+    } finally {
+      setIsTraining(false);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow p-6">
+      <h2 className="text-2xl font-semibold mb-4">
+        Step 1: Upload Historical Data
+      </h2>
+
+      <div className="space-y-4">
+        <div>
+          <label className="block mb-2">
+            <span className="text-gray-700">
+              Upload CSV file with historical NFL games
+            </span>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="mt-1 block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100
+                cursor-pointer"
+              disabled={isTraining}
+            />
+          </label>
+
+          {fileName && (
+            <p className="text-sm text-green-600 mt-2">✓ Loaded: {fileName}</p>
+          )}
+        </div>
+
+        {isTraining && (
+          <div className="flex items-center gap-2 text-blue-600">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            <span>Training model...</span>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-50 text-red-600 p-3 rounded">{error}</div>
+        )}
+
+        <div className="bg-blue-50 p-4 rounded text-sm">
+          <p className="font-semibold mb-2">Expected CSV format:</p>
+          <code className="text-xs bg-white p-2 block rounded">
+            season,week,home_team,away_team,home_win,spread,total,
+            rest_days_home,rest_days_away,rolling_form_home,rolling_form_away,
+            divisional,thursday_game,international,travel_miles
+          </code>
+        </div>
+      </div>
+    </div>
+  );
+}
