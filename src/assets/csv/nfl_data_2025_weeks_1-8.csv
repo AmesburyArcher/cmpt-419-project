@@ -1,0 +1,122 @@
+season,week,date,home_team,away_team,home_score,away_score,home_win,rolling_form_home,rolling_form_away,rest_days_home,rest_days_away,divisional,thursday_game,international,travel_miles,spread,total
+2025,1,2025-09-05T00:20Z,Philadelphia Eagles,Dallas Cowboys,24,20,1,0.5,0.5,7,7,1,1,0,0,-8,47.5
+2025,1,2025-09-06T00:00Z,Los Angeles Chargers,Kansas City Chiefs,27,21,1,0.5,0.5,7,7,1,0,0,0,3,47.5
+2025,1,2025-09-07T17:00Z,Atlanta Falcons,Tampa Bay Buccaneers,20,23,0,0.5,0.5,7,7,1,0,0,0,1,47.5
+2025,1,2025-09-07T17:00Z,Cleveland Browns,Cincinnati Bengals,16,17,0,0.5,0.5,7,7,1,0,0,0,4.5,47.5
+2025,1,2025-09-07T17:00Z,Indianapolis Colts,Miami Dolphins,33,8,1,0.5,0.5,7,7,0,0,0,0,-1,47
+2025,1,2025-09-07T17:00Z,New England Patriots,Las Vegas Raiders,13,20,0,0.5,0.5,7,7,0,0,0,0,-2.5,44.5
+2025,1,2025-09-07T17:00Z,New Orleans Saints,Arizona Cardinals,13,20,0,0.5,0.5,7,7,0,0,0,0,5.5,44.5
+2025,1,2025-09-07T17:00Z,New York Jets,Pittsburgh Steelers,32,34,0,0.5,0.5,7,7,0,0,0,0,3,38
+2025,1,2025-09-07T17:00Z,Washington Commanders,New York Giants,21,6,1,0.5,0.5,7,7,1,0,0,0,-6,45.5
+2025,1,2025-09-07T17:00Z,Jacksonville Jaguars,Carolina Panthers,26,10,1,0.5,0.5,7,7,0,0,0,0,-4.5,45
+2025,1,2025-09-07T20:05Z,Denver Broncos,Tennessee Titans,20,12,1,0.5,0.5,7,7,0,0,0,0,-8.5,42.5
+2025,1,2025-09-07T20:05Z,Seattle Seahawks,San Francisco 49ers,13,17,0,0.5,0.5,7,7,1,0,0,0,1.5,43.5
+2025,1,2025-09-07T20:25Z,Green Bay Packers,Detroit Lions,27,13,1,0.5,0.5,7,7,1,0,0,0,-1.5,48
+2025,1,2025-09-07T20:25Z,Los Angeles Rams,Houston Texans,14,9,1,0.5,0.5,7,7,0,0,0,0,-3,43
+2025,1,2025-09-08T00:20Z,Buffalo Bills,Baltimore Ravens,41,40,1,0.5,0.5,7,7,0,0,0,0,1.5,51.5
+2025,1,2025-09-09T00:15Z,Chicago Bears,Minnesota Vikings,24,27,0,0.5,0.5,7,7,1,0,0,0,-1,43.5
+2025,2,2025-09-12T00:15Z,Green Bay Packers,Washington Commanders,27,18,1,1,1,4,4,0,1,0,0,-3,48
+2025,2,2025-09-14T17:00Z,Cincinnati Bengals,Jacksonville Jaguars,31,27,1,1,1,7,7,0,0,0,0,-3.5,49.5
+2025,2,2025-09-14T17:00Z,Dallas Cowboys,New York Giants,40,37,1,0,0,9,7,1,0,0,0,-4.5,44.5
+2025,2,2025-09-14T17:00Z,Detroit Lions,Chicago Bears,52,21,1,0,0,6,5,1,0,0,0,-6,46
+2025,2,2025-09-14T17:00Z,Tennessee Titans,Los Angeles Rams,19,33,0,0,1,6,6,0,0,0,0,5.5,41
+2025,2,2025-09-14T17:00Z,Miami Dolphins,New England Patriots,27,33,0,0,0,7,7,1,0,0,0,-2.5,43
+2025,2,2025-09-14T17:00Z,New Orleans Saints,San Francisco 49ers,21,26,0,0,1,7,6,0,0,0,0,3,40.5
+2025,2,2025-09-14T17:00Z,New York Jets,Buffalo Bills,10,30,0,0,1,7,6,1,0,0,0,5.5,47
+2025,2,2025-09-14T17:00Z,Pittsburgh Steelers,Seattle Seahawks,17,31,0,1,0,7,6,0,0,0,0,-4,40.5
+2025,2,2025-09-14T17:00Z,Baltimore Ravens,Cleveland Browns,41,17,1,0,0,6,7,1,0,0,0,-12.5,46.5
+2025,2,2025-09-14T20:05Z,Indianapolis Colts,Denver Broncos,29,28,1,1,1,7,7,0,0,0,0,1,43.5
+2025,2,2025-09-14T20:05Z,Arizona Cardinals,Carolina Panthers,27,22,1,1,0,7,7,0,0,0,0,-7,45.5
+2025,2,2025-09-14T20:25Z,Kansas City Chiefs,Philadelphia Eagles,17,20,0,0,1,8,9,0,0,0,0,1,47
+2025,2,2025-09-15T00:20Z,Minnesota Vikings,Atlanta Falcons,6,22,0,1,0,6,7,0,0,0,0,-3,44.5
+2025,2,2025-09-15T23:00Z,Houston Texans,Tampa Bay Buccaneers,19,20,0,0,1,8,8,0,0,0,0,-2.5,42.5
+2025,2,2025-09-16T02:00Z,Las Vegas Raiders,Los Angeles Chargers,9,20,0,1,1,8,10,1,0,0,0,3.5,46.5
+2025,3,2025-09-19T00:15Z,Buffalo Bills,Miami Dolphins,31,21,1,1,0,4,4,1,1,0,0,-8.5,50.5
+2025,3,2025-09-21T17:00Z,Cleveland Browns,Green Bay Packers,13,10,1,0,1,7,9,0,0,0,0,7.5,41
+2025,3,2025-09-21T17:00Z,Tennessee Titans,Indianapolis Colts,20,41,0,0,1,7,6,1,0,0,0,6,42.5
+2025,3,2025-09-21T17:00Z,Minnesota Vikings,Cincinnati Bengals,48,10,1,0.5,1,6,7,0,0,0,0,-3,43
+2025,3,2025-09-21T17:00Z,New England Patriots,Pittsburgh Steelers,14,21,0,0.5,0.5,7,7,0,0,0,0,1,44.5
+2025,3,2025-09-21T17:00Z,Philadelphia Eagles,Los Angeles Rams,33,26,1,1,1,6,7,0,0,0,0,-3.5,45.5
+2025,3,2025-09-21T17:00Z,Tampa Bay Buccaneers,New York Jets,29,27,1,1,0,5,7,0,0,0,0,-6.5,43
+2025,3,2025-09-21T17:00Z,Washington Commanders,Las Vegas Raiders,41,24,1,0.5,0.5,9,5,0,0,0,0,-3,44
+2025,3,2025-09-21T17:00Z,Carolina Panthers,Atlanta Falcons,30,0,1,0,0.5,6,6,1,0,0,0,4.5,44
+2025,3,2025-09-21T17:00Z,Jacksonville Jaguars,Houston Texans,17,10,1,0.5,0,7,5,1,0,0,0,-1.5,43
+2025,3,2025-09-21T20:05Z,Los Angeles Chargers,Denver Broncos,23,20,1,1,0.5,5,7,1,0,0,0,-3,45.5
+2025,3,2025-09-21T20:05Z,Seattle Seahawks,New Orleans Saints,44,13,1,0.5,0,7,7,0,0,0,0,-7,41.5
+2025,3,2025-09-21T20:25Z,Chicago Bears,Dallas Cowboys,31,14,1,0,0.5,7,7,0,0,0,0,1.5,50
+2025,3,2025-09-21T20:25Z,San Francisco 49ers,Arizona Cardinals,16,15,1,1,1,7,7,1,0,0,0,-1.5,44.5
+2025,3,2025-09-22T00:20Z,New York Giants,Kansas City Chiefs,9,22,0,0,0,7,7,0,0,0,0,6,44.5
+2025,3,2025-09-23T00:15Z,Baltimore Ravens,Detroit Lions,30,38,0,0.5,0.5,8,8,0,0,0,0,-4.5,54
+2025,4,2025-09-26T00:15Z,Arizona Cardinals,Seattle Seahawks,20,23,0,0.6666666666666670,0.6666666666666670,4,4,1,1,0,0,1,44
+2025,4,2025-09-28T13:30Z,Pittsburgh Steelers,Minnesota Vikings,24,21,1,0.6666666666666670,0.6666666666666670,6,6,0,0,0,0,2.5,41
+2025,4,2025-09-28T17:00Z,Atlanta Falcons,Washington Commanders,34,27,1,0.3333333333333330,0.6666666666666670,7,7,0,0,0,0,-2.5,43.5
+2025,4,2025-09-28T17:00Z,Buffalo Bills,New Orleans Saints,31,19,1,1,0,9,6,0,0,0,0,-14.5,48.5
+2025,4,2025-09-28T17:00Z,Detroit Lions,Cleveland Browns,34,10,1,0.6666666666666670,0.3333333333333330,5,7,0,0,0,0,-10,44.5
+2025,4,2025-09-28T17:00Z,New England Patriots,Carolina Panthers,42,13,1,0.3333333333333330,0.3333333333333330,7,7,0,0,0,0,-5.5,42.5
+2025,4,2025-09-28T17:00Z,New York Giants,Los Angeles Chargers,21,18,1,0,1,6,6,0,0,0,0,6,42.5
+2025,4,2025-09-28T17:00Z,Tampa Bay Buccaneers,Philadelphia Eagles,25,31,0,1,1,7,7,0,0,0,0,3.5,44
+2025,4,2025-09-28T17:00Z,Houston Texans,Tennessee Titans,26,0,1,0,0,7,7,1,0,0,0,-7.5,39.5
+2025,4,2025-09-28T20:05Z,Los Angeles Rams,Indianapolis Colts,27,20,1,0.6666666666666670,1,7,7,0,0,0,0,-3.5,49.5
+2025,4,2025-09-28T20:05Z,San Francisco 49ers,Jacksonville Jaguars,21,26,0,1,0.6666666666666670,6,7,0,0,0,0,-3,46
+2025,4,2025-09-28T20:25Z,Kansas City Chiefs,Baltimore Ravens,37,20,1,0.3333333333333330,0.3333333333333330,6,5,0,0,0,0,2.5,48.5
+2025,4,2025-09-28T20:25Z,Las Vegas Raiders,Chicago Bears,24,25,0,0.3333333333333330,0.3333333333333330,7,7,0,0,0,0,-2,47.5
+2025,4,2025-09-29T00:20Z,Dallas Cowboys,Green Bay Packers,40,40,0,0.3333333333333330,0.6666666666666670,7,7,0,0,0,0,6.5,47
+2025,4,2025-09-29T23:15Z,Miami Dolphins,New York Jets,27,21,1,0,0,10,8,1,0,0,0,-2.5,43.5
+2025,4,2025-09-30T00:15Z,Denver Broncos,Cincinnati Bengals,28,3,1,0.3333333333333330,0.6666666666666670,8,8,0,0,0,0,-7.5,44.5
+2025,5,2025-10-03T00:15Z,Los Angeles Rams,San Francisco 49ers,23,26,0,0.75,0.75,4,4,1,1,0,0,-8,44
+2025,5,2025-10-05T13:30Z,Cleveland Browns,Minnesota Vikings,17,21,0,0.25,0.5,6,7,0,0,0,0,3.5,35.5
+2025,5,2025-10-05T17:00Z,Indianapolis Colts,Las Vegas Raiders,40,6,1,0.75,0.25,6,6,0,0,0,0,-7.5,46.5
+2025,5,2025-10-05T17:00Z,New Orleans Saints,New York Giants,26,14,1,0,0.25,7,7,0,0,0,0,-2.5,42
+2025,5,2025-10-05T17:00Z,New York Jets,Dallas Cowboys,22,37,0,0,0.25,5,6,0,0,0,0,-1.5,47.5
+2025,5,2025-10-05T17:00Z,Philadelphia Eagles,Denver Broncos,17,21,0,1,0.5,7,5,0,0,0,0,-4,44
+2025,5,2025-10-05T17:00Z,Carolina Panthers,Miami Dolphins,27,24,1,0.25,0.25,7,5,0,0,0,0,1,44
+2025,5,2025-10-05T17:00Z,Baltimore Ravens,Houston Texans,10,44,0,0.25,0.25,6,7,0,0,0,0,2.5,41.5
+2025,5,2025-10-05T20:05Z,Arizona Cardinals,Tennessee Titans,21,22,0,0.5,0,9,7,0,0,0,0,-7.5,41.5
+2025,5,2025-10-05T20:05Z,Seattle Seahawks,Tampa Bay Buccaneers,35,38,0,0.75,0.75,9,7,0,0,0,0,-3.5,44.5
+2025,5,2025-10-05T20:25Z,Cincinnati Bengals,Detroit Lions,24,37,0,0.5,0.75,5,7,0,0,0,0,9.5,49
+2025,5,2025-10-05T20:25Z,Los Angeles Chargers,Washington Commanders,10,27,0,0.75,0.5,7,7,0,0,0,0,-3,48.5
+2025,5,2025-10-06T00:20Z,Buffalo Bills,New England Patriots,20,23,0,1,0.5,7,7,1,0,0,0,-7.5,48.5
+2025,5,2025-10-07T00:15Z,Jacksonville Jaguars,Kansas City Chiefs,31,28,1,0.75,0.5,8,8,0,0,0,0,3.5,45.5
+2025,6,2025-10-10T00:15Z,New York Giants,Philadelphia Eagles,34,17,1,0.2,0.8,4,4,1,1,0,0,7,41
+2025,6,2025-10-12T13:30Z,New York Jets,Denver Broncos,11,13,0,0,0.6,6,6,0,0,0,0,7,43.5
+2025,6,2025-10-12T17:00Z,Indianapolis Colts,Arizona Cardinals,31,27,1,0.8,0.4,7,6,0,0,0,0,-9,46.5
+2025,6,2025-10-12T17:00Z,Miami Dolphins,Los Angeles Chargers,27,29,0,0.2,0.6,7,6,0,0,0,0,3.5,45.5
+2025,6,2025-10-12T17:00Z,New Orleans Saints,New England Patriots,19,25,0,0.2,0.6,7,6,0,0,0,0,3,46
+2025,6,2025-10-12T17:00Z,Pittsburgh Steelers,Cleveland Browns,23,9,1,0.75,0.2,14,7,1,0,0,0,-6.5,38
+2025,6,2025-10-12T17:00Z,Carolina Panthers,Dallas Cowboys,30,27,1,0.4,0.4,7,7,0,0,0,0,3,46.5
+2025,6,2025-10-12T17:00Z,Jacksonville Jaguars,Seattle Seahawks,12,20,0,0.8,0.6,5,6,0,0,0,0,1,47.5
+2025,6,2025-10-12T17:00Z,Baltimore Ravens,Los Angeles Rams,3,17,0,0.2,0.6,7,9,0,0,0,0,6.5,43.5
+2025,6,2025-10-12T20:05Z,Las Vegas Raiders,Tennessee Titans,20,10,1,0.2,0.2,7,7,0,0,0,0,-3.5,41.5
+2025,6,2025-10-12T20:25Z,Green Bay Packers,Cincinnati Bengals,27,18,1,0.75,0.4,13,7,0,0,0,0,-14,44.5
+2025,6,2025-10-12T20:25Z,Tampa Bay Buccaneers,San Francisco 49ers,30,19,1,0.8,0.8,7,9,0,0,0,0,-3.5,47
+2025,6,2025-10-13T00:20Z,Kansas City Chiefs,Detroit Lions,30,17,1,0.4,0.8,6,7,0,0,0,0,-2.5,51.5
+2025,6,2025-10-13T23:15Z,Atlanta Falcons,Buffalo Bills,24,14,1,0.5,0.8,15,7,0,0,0,0,3.5,49.5
+2025,6,2025-10-14T00:15Z,Washington Commanders,Chicago Bears,24,25,0,0.6,0.5,8,15,0,0,0,0,-5.5,49
+2025,7,2025-10-17T00:15Z,Cincinnati Bengals,Pittsburgh Steelers,33,31,1,0.2,0.8,4,4,1,1,0,0,5.5,44.5
+2025,7,2025-10-19T13:30Z,Jacksonville Jaguars,Los Angeles Rams,7,35,0,0.6,0.6,6,6,0,0,0,0,3,44
+2025,7,2025-10-19T17:00Z,Chicago Bears,New Orleans Saints,26,14,1,0.6,0.2,5,7,0,0,0,0,-3.5,43.5
+2025,7,2025-10-19T17:00Z,Cleveland Browns,Miami Dolphins,31,6,1,0.2,0.2,7,7,0,0,0,0,-2.5,34.5
+2025,7,2025-10-19T17:00Z,Tennessee Titans,New England Patriots,13,31,0,0.2,0.8,6,7,0,0,0,0,6.5,41
+2025,7,2025-10-19T17:00Z,Kansas City Chiefs,Las Vegas Raiders,31,0,1,0.6,0.2,6,6,1,0,0,0,-13,44.5
+2025,7,2025-10-19T17:00Z,Minnesota Vikings,Philadelphia Eagles,22,28,0,0.6,0.6,14,9,0,0,0,0,2.5,44
+2025,7,2025-10-19T17:00Z,New York Jets,Carolina Panthers,6,13,0,0,0.6,7,7,0,0,0,0,1,40
+2025,7,2025-10-19T20:05Z,Denver Broncos,New York Giants,33,32,1,0.6,0.4,7,9,0,0,0,0,-8,41
+2025,7,2025-10-19T20:05Z,Los Angeles Chargers,Indianapolis Colts,24,38,0,0.6,0.8,7,7,0,0,0,0,-2.5,49
+2025,7,2025-10-19T20:25Z,Dallas Cowboys,Washington Commanders,44,22,1,0.4,0.4,7,5,1,0,0,0,-1.5,55.5
+2025,7,2025-10-19T20:25Z,Arizona Cardinals,Green Bay Packers,23,27,0,0.2,0.8,7,7,0,0,0,0,7,44.5
+2025,7,2025-10-20T00:20Z,San Francisco 49ers,Atlanta Falcons,20,10,1,0.6,0.6,7,6,0,0,0,0,1,47
+2025,7,2025-10-20T23:00Z,Detroit Lions,Tampa Bay Buccaneers,24,9,1,0.8,0.8,7,8,0,0,0,0,-6,54
+2025,7,2025-10-21T02:00Z,Seattle Seahawks,Houston Texans,27,19,1,0.8,0.4,8,15,0,0,0,0,-3,41
+2025,8,2025-10-24T00:15Z,Los Angeles Chargers,Minnesota Vikings,37,10,1,0.4,0.4,4,4,0,1,0,0,-3,45
+2025,8,2025-10-26T17:00Z,Atlanta Falcons,Miami Dolphins,10,34,0,0.6,0.2,6,7,0,0,0,0,-7,44
+2025,8,2025-10-26T17:00Z,Cincinnati Bengals,New York Jets,38,39,0,0.2,0,9,7,0,0,0,0,-5.5,44
+2025,8,2025-10-26T17:00Z,New England Patriots,Cleveland Browns,32,13,1,0.8,0.4,7,7,0,0,0,0,-7,40.5
+2025,8,2025-10-26T17:00Z,Philadelphia Eagles,New York Giants,38,20,1,0.6,0.4,7,6,1,0,0,0,-7.5,43.5
+2025,8,2025-10-26T17:00Z,Carolina Panthers,Buffalo Bills,9,40,0,0.8,0.6,7,12,0,0,0,0,7,47.5
+2025,8,2025-10-26T17:00Z,Baltimore Ravens,Chicago Bears,30,16,1,0.2,0.8,14,7,0,0,0,0,-2.5,45
+2025,8,2025-10-26T17:00Z,Houston Texans,San Francisco 49ers,26,15,1,0.4,0.6,5,6,0,0,0,0,-3,41
+2025,8,2025-10-26T20:05Z,New Orleans Saints,Tampa Bay Buccaneers,3,23,0,0.2,0.6,7,5,1,0,0,0,3.5,46
+2025,8,2025-10-26T20:25Z,Denver Broncos,Dallas Cowboys,44,24,1,0.8,0.4,7,7,0,0,0,0,-4,52
+2025,8,2025-10-26T20:25Z,Indianapolis Colts,Tennessee Titans,38,14,1,0.8,0.2,7,7,1,0,0,0,-15,47.5
+2025,8,2025-10-27T00:20Z,Pittsburgh Steelers,Green Bay Packers,25,35,0,0.6,0.8,10,7,0,0,0,0,2.5,45.5
+2025,8,2025-10-28T00:15Z,Kansas City Chiefs,Washington Commanders,28,7,1,0.8,0.4,8,8,0,0,0,0,-10.5,48
