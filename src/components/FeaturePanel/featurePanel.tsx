@@ -1,9 +1,7 @@
 import { useState } from "react";
-import * as tf from "@tensorflow/tfjs";
 import { NflGameInterface } from "@/interfaces/nflGame.interface.ts";
 import { LogisticRegressionModel } from "@/models/LogisticRegressionModel.model.ts";
-import { prepareFeatures } from "@/utils/features.utils.ts";
-import { calculateCalibration } from "@/utils/model.utils.ts";
+import { trainModelUtil } from "@/utils/model.utils.ts";
 
 const AVAILABLE_FEATURES = [
   { key: "spread", label: "Point Spread", category: "Market" },
@@ -42,12 +40,10 @@ export function FeaturePanel({
       ? selectedFeatures.filter((f) => f !== featureKey)
       : [...selectedFeatures, featureKey];
 
-    // Need at least one feature
     if (newFeatures.length === 0) return;
 
     onFeaturesChange(newFeatures);
 
-    // Auto-retrain if enabled
     if (autoRetrain) {
       await retrainModel(newFeatures);
     }
@@ -57,26 +53,15 @@ export function FeaturePanel({
     setIsTraining(true);
 
     try {
-      const { X, y, featureNames } = prepareFeatures(historicalGames, features);
-
-      const model = new LogisticRegressionModel();
-      await model.train(X, y, featureNames, 100);
-
-      const predictions = model.predict(X) as tf.Tensor;
-      const predData = Array.from(await predictions.data());
-      const yData = Array.from(await y.data());
-
-      const brierScore =
-        predData.reduce(
-          (sum, pred, i) => sum + Math.pow(pred - yData[i], 2),
-          0,
-        ) / predData.length;
-
-      const accuracy =
-        predData.filter((pred, i) => (pred > 0.5 ? 1 : 0) === yData[i]).length /
-        predData.length;
-
-      const calibrationData = calculateCalibration(predData, yData, 10);
+      const {
+        brierScore,
+        accuracy,
+        calibrationData,
+        model,
+        X,
+        y,
+        predictions,
+      } = await trainModelUtil(historicalGames, features);
 
       onRetrain(model, { brierScore, accuracy, calibrationData });
 

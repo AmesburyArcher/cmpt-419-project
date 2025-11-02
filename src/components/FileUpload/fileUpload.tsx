@@ -4,7 +4,7 @@ import { LogisticRegressionModel } from "@/models/LogisticRegressionModel.model.
 import { NflGameInterface } from "@/interfaces/nflGame.interface.ts";
 import { parseCSV } from "@/utils/parsing.utils.ts";
 import { prepareFeatures } from "@/utils/features.utils.ts";
-import { calculateCalibration } from "@/utils/model.utils.ts";
+import { calculateCalibration, trainModelUtil } from "@/utils/model.utils.ts";
 
 interface FileUploadProps {
   onDataLoaded: (games: NflGameInterface[]) => void;
@@ -49,32 +49,15 @@ export function FileUpload({
     setIsTraining(true);
 
     try {
-      // Prepare data
-      const { X, y, featureNames } = prepareFeatures(games, selectedFeatures);
-
-      // Train model
-      const model = new LogisticRegressionModel();
-      await model.train(X, y, featureNames, 100);
-
-      // Calculate metrics
-      const predictions = model.predict(X) as tf.Tensor;
-      const predData = Array.from(await predictions.data());
-      const yData = Array.from(await y.data());
-
-      // Brier score
-      const brierScore =
-        predData.reduce(
-          (sum, pred, i) => sum + Math.pow(pred - yData[i], 2),
-          0,
-        ) / predData.length;
-
-      // Accuracy
-      const accuracy =
-        predData.filter((pred, i) => (pred > 0.5 ? 1 : 0) === yData[i]).length /
-        predData.length;
-
-      // Calibration
-      const calibrationData = calculateCalibration(predData, yData, 10);
+      const {
+        brierScore,
+        accuracy,
+        calibrationData,
+        model,
+        X,
+        y,
+        predictions,
+      } = await trainModelUtil(games, selectedFeatures);
 
       onModelTrained(model, {
         brierScore,
@@ -82,7 +65,6 @@ export function FileUpload({
         calibrationData,
       });
 
-      // Cleanup
       X.dispose();
       y.dispose();
       predictions.dispose();

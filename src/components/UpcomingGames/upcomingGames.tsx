@@ -15,12 +15,14 @@ interface UpcomingGamesProps {
   model: LogisticRegressionModel;
   selectedFeatures: string[];
   historicalGames: NflGameInterface[];
+  modelVersion: number;
 }
 
 export function UpcomingGames({
   model,
   selectedFeatures,
   historicalGames,
+  modelVersion,
 }: UpcomingGamesProps) {
   const {
     data: liveEvents,
@@ -34,14 +36,17 @@ export function UpcomingGames({
   });
 
   const predictions = useMemo(() => {
-    if (!liveEvents || liveEvents.length === 0) return [];
+    if (!liveEvents || liveEvents.length === 0 || !model.isTrained()) return [];
+
+    // Get the features that the model was actually trained with
+    const modelFeatures = model.getFeatureNames();
 
     return liveEvents
       .map((event) => {
-        // Map live event to model features
+        // Map live event to model features using the model's feature list
         const features = mapLiveGameToFeatures(
           event,
-          selectedFeatures,
+          modelFeatures, // Use model's features instead of selectedFeatures prop
           historicalGames,
         );
 
@@ -103,7 +108,7 @@ export function UpcomingGames({
         };
       })
       .filter((p) => p !== null);
-  }, [liveEvents, model, selectedFeatures, historicalGames]);
+  }, [liveEvents, model, selectedFeatures, historicalGames, modelVersion]);
 
   if (isLoading) {
     return (

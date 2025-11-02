@@ -114,10 +114,7 @@ export function DataBuilder() {
               <li>Real game results and scores from ESPN</li>
               <li>Automatically calculated rolling form and rest days</li>
               <li>Divisional game flags and Thursday game indicators</li>
-              <li>
-                ⚠️ Spread and total will be 0 (you'll need to add these manually
-                or use historical odds data)
-              </li>
+              <li>Spread and total will be 0, these need to be added in.</li>
             </ul>
           </div>
         </div>

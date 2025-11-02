@@ -23,17 +23,17 @@ function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900">
-                    🏈 NFL Market vs Model
+                    NFL Market Analyzer
                   </h1>
                   <p className="text-sm text-gray-600">
-                    Sports Betting Analyzer with Client-Side ML
+                    Train a model on historical data, then compare predictions
+                    to live odds
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-gray-500">
                     Data-Centric AI Project
                   </p>
-                  <p className="text-xs text-gray-400">Track 5.0.1 + 5.0.2</p>
                 </div>
               </div>
             </div>
@@ -50,7 +50,7 @@ function App() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-600">
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">
-                    ⚠️ Disclaimer
+                    Disclaimer
                   </h3>
                   <p className="text-xs">
                     This tool is for educational and research purposes only.
@@ -60,7 +60,7 @@ function App() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">
-                    📊 How It Works
+                    How It Works
                   </h3>
                   <p className="text-xs">
                     Upload historical NFL data → Train logistic regression model
@@ -70,12 +70,12 @@ function App() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">
-                    🔬 Methodology
+                    Methodology
                   </h3>
                   <p className="text-xs">
-                    Uses client-side TensorFlow.js for transparent, explainable
-                    predictions. Features calibration analysis, Brier scoring,
-                    and Kelly Criterion for bankroll management.
+                    Uses client-side TensorFlow.js for predictions. Features
+                    calibration analysis, Brier scoring, and Quarter Kelly
+                    Criterion for bankroll management.
                   </p>
                 </div>
               </div>

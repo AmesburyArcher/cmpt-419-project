@@ -16,6 +16,7 @@ export function NFLAnalyzer() {
 
   // Model state
   const [model, setModel] = useState<LogisticRegressionModel | null>(null);
+  const [modelVersion, setModelVersion] = useState<number>(0);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([
     "spread",
     "total",
@@ -40,18 +41,9 @@ export function NFLAnalyzer() {
   return (
     <div>
       <div className="max-w-7xl mx-auto p-6">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">
-            NFL Market vs Model Analyzer
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Train a model on historical data, then compare predictions to live
-            odds
-          </p>
-          <section className="mb-8">
-            <DataBuilder />
-          </section>
-        </header>
+        <section className="mb-8">
+          <DataBuilder />
+        </section>
 
         {/* Step 1: Upload Historical Data */}
         <section className="mb-8">
@@ -60,6 +52,7 @@ export function NFLAnalyzer() {
             onModelTrained={(trainedModel, trainingMetrics) => {
               setModel(trainedModel);
               setMetrics(trainingMetrics);
+              setModelVersion((v) => v + 1);
             }}
             selectedFeatures={selectedFeatures}
             isTraining={isTraining}
@@ -78,6 +71,7 @@ export function NFLAnalyzer() {
                 onRetrain={(trainedModel, trainingMetrics) => {
                   setModel(trainedModel);
                   setMetrics(trainingMetrics);
+                  setModelVersion((v) => v + 1);
                 }}
                 isTraining={isTraining}
                 setIsTraining={setIsTraining}
@@ -99,6 +93,7 @@ export function NFLAnalyzer() {
                   model={model}
                   selectedFeatures={selectedFeatures}
                   historicalGames={historicalGames}
+                  modelVersion={modelVersion}
                 />
               </section>
             )}

@@ -1,3 +1,8 @@
+import { LogisticRegressionModel } from "@/models/LogisticRegressionModel.model.ts";
+import * as tf from "@tensorflow/tfjs";
+import { prepareFeatures } from "@/utils/features.utils.ts";
+import { NflGameInterface } from "@/interfaces/nflGame.interface.ts";
+
 export function calculateCalibration(
   predictions: number[],
   actuals: number[],
@@ -38,4 +43,42 @@ export function calculateCalibration(
   }
 
   return calibrationData;
+}
+
+export async function trainModelUtil(
+  games: NflGameInterface[],
+  selectedFeatures: string[],
+) {
+  const { X, y, featureNames } = prepareFeatures(games, selectedFeatures);
+
+  const model = new LogisticRegressionModel();
+  await model.train(X, y, featureNames, 100);
+
+  // Calculate metrics
+  const predictions = model.predict(X) as tf.Tensor;
+  const predData = Array.from(await predictions.data());
+  const yData = Array.from(await y.data());
+
+  // Brier score
+  const brierScore =
+    predData.reduce((sum, pred, i) => sum + Math.pow(pred - yData[i], 2), 0) /
+    predData.length;
+
+  // Accuracy
+  const accuracy =
+    predData.filter((pred, i) => (pred > 0.5 ? 1 : 0) === yData[i]).length /
+    predData.length;
+
+  // Calibration
+  const calibrationData = calculateCalibration(predData, yData, 10);
+
+  return {
+    brierScore,
+    accuracy,
+    calibrationData,
+    model,
+    X,
+    y,
+    predictions,
+  };
 }
