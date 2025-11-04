@@ -16,7 +16,6 @@ export function ModelMetrics({ metrics }: ModelMetricsProps) {
       <h2 className="text-2xl font-semibold mb-4">Model Performance Metrics</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Brier Score */}
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
           <p className="text-sm text-gray-600 mb-1">Brier Score</p>
           <p className="text-3xl font-bold text-blue-900">
@@ -27,7 +26,6 @@ export function ModelMetrics({ metrics }: ModelMetricsProps) {
           </p>
         </div>
 
-        {/* Accuracy */}
         <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg">
           <p className="text-sm text-gray-600 mb-1">Accuracy</p>
           <p className="text-3xl font-bold text-green-900">
@@ -36,7 +34,6 @@ export function ModelMetrics({ metrics }: ModelMetricsProps) {
           <p className="text-xs text-gray-600 mt-2">Correct predictions</p>
         </div>
 
-        {/* Calibration Quality */}
         <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg">
           <p className="text-sm text-gray-600 mb-1">Calibration</p>
           <p className="text-3xl font-bold text-purple-900">
@@ -48,7 +45,6 @@ export function ModelMetrics({ metrics }: ModelMetricsProps) {
         </div>
       </div>
 
-      {/* Interpretation */}
       <div className="mt-6 p-4 bg-gray-50 rounded-lg">
         <h3 className="font-semibold mb-2">What do these metrics mean?</h3>
         <ul className="text-sm text-gray-700 space-y-1">
@@ -88,7 +84,6 @@ function calculateCalibrationScore(
 ): string {
   if (calibrationData.length === 0) return "N/A";
 
-  // Calculate mean absolute calibration error
   const totalCount = calibrationData.reduce((sum, d) => sum + d.count, 0);
   const weightedError =
     calibrationData.reduce((sum, d) => {

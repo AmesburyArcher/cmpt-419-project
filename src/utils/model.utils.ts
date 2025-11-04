@@ -53,7 +53,6 @@ function timeBasedSplit(
   games: NflGameInterface[],
   testSize: number = 0.2,
 ): { trainGames: NflGameInterface[]; testGames: NflGameInterface[] } {
-  // Sort games chronologically
   const sortedGames = [...games].sort((a, b) => {
     if (a.season !== b.season) return a.season - b.season;
     return a.week - b.week;
@@ -62,14 +61,6 @@ function timeBasedSplit(
   const splitIndex = Math.floor(sortedGames.length * (1 - testSize));
   const trainGames = sortedGames.slice(0, splitIndex);
   const testGames = sortedGames.slice(splitIndex);
-
-  console.log(`📅 Time-based split:`);
-  console.log(
-    `  Training: ${trainGames[0].season} W${trainGames[0].week} → ${trainGames[trainGames.length - 1].season} W${trainGames[trainGames.length - 1].week}`,
-  );
-  console.log(
-    `  Testing: ${testGames[0].season} W${testGames[0].week} → ${testGames[testGames.length - 1].season} W${testGames[testGames.length - 1].week}`,
-  );
 
   return { trainGames, testGames };
 }
@@ -83,14 +74,11 @@ function randomSplit(
   testSize: number = 0.2,
   seed?: number,
 ): { trainGames: NflGameInterface[]; testGames: NflGameInterface[] } {
-  // Shuffle games
   const shuffledGames = [...games];
 
-  // Simple seeded shuffle for reproducibility
   if (seed !== undefined) {
     let randomState = seed;
     for (let i = shuffledGames.length - 1; i > 0; i--) {
-      // Simple LCG for seeded random
       randomState = (randomState * 1664525 + 1013904223) % 4294967296;
       const j = Math.floor((randomState / 4294967296) * (i + 1));
       [shuffledGames[i], shuffledGames[j]] = [
@@ -99,7 +87,6 @@ function randomSplit(
       ];
     }
   } else {
-    // Fisher-Yates shuffle
     for (let i = shuffledGames.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffledGames[i], shuffledGames[j]] = [
@@ -113,9 +100,6 @@ function randomSplit(
   const trainGames = shuffledGames.slice(0, splitIndex);
   const testGames = shuffledGames.slice(splitIndex);
 
-  console.log(
-    `🎲 Random split (${seed !== undefined ? `seed: ${seed}` : "unseeded"}):`,
-  );
   console.log(`  Training: ${trainGames.length} games`);
   console.log(`  Testing: ${testGames.length} games`);
 
@@ -129,16 +113,14 @@ export async function trainModelUtil(
   splitMethod: "time-based" | "random" = "time-based",
   randomSeed?: number,
 ) {
-  // Perform split based on method
   const { trainGames, testGames } =
     splitMethod === "time-based"
       ? timeBasedSplit(games, testSize)
       : randomSplit(games, testSize, randomSeed);
 
-  console.log(`\nTraining on ${trainGames.length} games`);
-  console.log(`Testing on ${testGames.length} games\n`);
+  console.log(`Training on ${trainGames.length} games`);
+  console.log(`Testing on ${testGames.length} games`);
 
-  // Prepare features for train and test sets
   const {
     X: X_train,
     y: y_train,
@@ -146,7 +128,6 @@ export async function trainModelUtil(
   } = prepareFeatures(trainGames, selectedFeatures);
   const { X: X_test, y: y_test } = prepareFeatures(testGames, selectedFeatures);
 
-  // Train model on training data
   const model = new LogisticRegressionModel();
   const trainingMetrics = await model.train(
     X_train,
@@ -155,12 +136,10 @@ export async function trainModelUtil(
     100,
   );
 
-  // Evaluate on test set (completely unseen data)
   const testPredictions = model.predict(X_test) as tf.Tensor;
   const testPredData = Array.from(await testPredictions.data());
   const testYData = Array.from(await y_test.data());
 
-  // Calculate test metrics
   const testBrierScore =
     testPredData.reduce(
       (sum, pred, i) => sum + Math.pow(pred - testYData[i], 2),
@@ -173,18 +152,16 @@ export async function trainModelUtil(
 
   const calibrationData = calculateCalibration(testPredData, testYData, 10);
 
-  // Log performance comparison
   console.log(
     `Training Accuracy: ${(trainingMetrics.trainAccuracy * 100).toFixed(2)}%`,
   );
   console.log(
-    `Validation Accuracy (during training): ${(trainingMetrics.valAccuracy * 100).toFixed(2)}%`,
+    `Validation Accuracy: ${(trainingMetrics.valAccuracy * 100).toFixed(2)}%`,
   );
-  console.log(`Test Accuracy (held-out): ${(testAccuracy * 100).toFixed(2)}%`);
+  console.log(`Test Accuracy: ${(testAccuracy * 100).toFixed(2)}%`);
   console.log(`Training Brier: ${trainingMetrics.trainLoss.toFixed(4)}`);
   console.log(`Test Brier: ${testBrierScore.toFixed(4)}`);
 
-  // Cleanup tensors
   testPredictions.dispose();
   X_train.dispose();
   y_train.dispose();
@@ -192,12 +169,10 @@ export async function trainModelUtil(
   y_test.dispose();
 
   return {
-    // Test metrics (primary - what you should trust)
     brierScore: testBrierScore,
     accuracy: testAccuracy,
     calibrationData,
 
-    // Training metrics (for comparison)
     trainBrierScore: trainingMetrics.trainLoss,
     trainAccuracy: trainingMetrics.trainAccuracy,
     valBrierScore: trainingMetrics.valLoss,
@@ -205,7 +180,6 @@ export async function trainModelUtil(
 
     model,
 
-    // Return empty tensors for backwards compatibility
     X: tf.tensor2d([[]]),
     y: tf.tensor2d([[]]),
     predictions: tf.tensor2d([[]]),

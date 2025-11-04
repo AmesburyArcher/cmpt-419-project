@@ -62,7 +62,7 @@ function calculateRollingForm(
     )
     .slice(-lookback);
 
-  if (previousGames.length === 0) return 0.5; // Default
+  if (previousGames.length === 0) return 0.5;
 
   const wins = previousGames.filter((g) => {
     const isHome = g.home_team === team;
@@ -84,14 +84,12 @@ function calculateRestDays(
     .filter((g) => g.home_team === team || g.away_team === team)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
-  if (!previousGame) return 7; // First game of season
+  if (!previousGame) return 7;
 
-  const daysDiff = Math.floor(
+  return Math.floor(
     (new Date(currentDate).getTime() - new Date(previousGame.date).getTime()) /
       (1000 * 60 * 60 * 24),
   );
-
-  return daysDiff;
 }
 
 /**
@@ -167,18 +165,14 @@ export async function buildHistoricalCSV(
 ) {
   const allGames: NFLGameData[] = [];
 
-  // Fetch all games for the season
   for (let week = startWeek; week <= endWeek; week++) {
-    console.log(`Fetching week ${week}...`);
     const games = await fetchESPNGames(season, week);
     allGames.push(...games);
 
-    // Rate limiting - be nice to ESPN's API
     await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
-  // Enrich each game with calculated features
-  const enrichedGames = allGames.map((game) => {
+  return allGames.map((game) => {
     const gamesBeforeCurrent = allGames.filter(
       (g) => new Date(g.date) < new Date(game.date),
     );
@@ -207,13 +201,10 @@ export async function buildHistoricalCSV(
       ),
       divisional: isDivisionalGame(game.home_team, game.away_team) ? 1 : 0,
       thursday_game: new Date(game.date).getDay() === 4 ? 1 : 0,
-      international: 0, // Would need additional data source
-      travel_miles: 0, // Would need to calculate
-      // Note: spread and total would need to come from odds API or manual entry
+      international: 0,
+      travel_miles: 0,
     };
   });
-
-  return enrichedGames;
 }
 
 /**

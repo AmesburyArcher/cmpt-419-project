@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Slider } from "@/components/ui/slider.tsx";
 
 export interface TrainTestSettings {
   splitMethod: "time-based" | "random";
@@ -29,12 +30,10 @@ export function TrainTestSettingsPanel({
   return (
     <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
       <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-        <span>⚙️</span>
         <span>Train/Test Split Settings</span>
       </h3>
 
       <div className="space-y-4">
-        {/* Split Method */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Split Method
@@ -55,9 +54,7 @@ export function TrainTestSettingsPanel({
                 className="mt-1"
               />
               <div className="flex-1">
-                <div className="font-semibold text-gray-800">
-                  📅 Time-Based (Recommended)
-                </div>
+                <div className="font-semibold text-gray-800">Time-Based</div>
                 <p className="text-xs text-gray-600 mt-1">
                   Train on older games, test on newer games. Most realistic for
                   betting since you're predicting future games.
@@ -83,9 +80,7 @@ export function TrainTestSettingsPanel({
                 className="mt-1"
               />
               <div className="flex-1">
-                <div className="font-semibold text-gray-800">
-                  🎲 Random Split
-                </div>
+                <div className="font-semibold text-gray-800">Random Split</div>
                 <p className="text-xs text-gray-600 mt-1">
                   Randomly shuffle games before splitting. Useful for general
                   performance testing but less realistic for time-series data.
@@ -98,21 +93,17 @@ export function TrainTestSettingsPanel({
           </div>
         </div>
 
-        {/* Test Size */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Test Set Size
           </label>
           <div className="flex items-center gap-3">
-            <input
-              type="range"
-              min="10"
-              max="40"
-              step="5"
-              value={localSettings.testSize * 100}
-              onChange={(e) =>
-                handleChange({ testSize: parseInt(e.target.value) / 100 })
-              }
+            <Slider
+              min={10}
+              max={40}
+              step={5}
+              value={[localSettings.testSize * 100]}
+              onValueChange={(e) => handleChange({ testSize: e?.[0] / 100 })}
               disabled={disabled}
               className="flex-1"
             />
@@ -125,7 +116,6 @@ export function TrainTestSettingsPanel({
           </p>
         </div>
 
-        {/* Random Seed (only for random split) */}
         {localSettings.splitMethod === "random" && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -166,20 +156,10 @@ export function TrainTestSettingsPanel({
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              Use a seed to get the same split every time (reproducible results)
+              Use a seed to get the same split every time
             </p>
           </div>
         )}
-
-        {/* Info box */}
-        <div className="bg-blue-50 border border-blue-200 rounded p-3 text-xs text-blue-800">
-          <p className="font-semibold mb-1">💡 Why does this matter?</p>
-          <p>
-            {localSettings.splitMethod === "time-based"
-              ? "Time-based splitting ensures you're testing on truly future games, just like real betting. This gives you the most realistic performance metrics."
-              : "Random splitting is useful for general model evaluation but can be overly optimistic for time-series data like NFL games since it doesn't respect chronological ordering."}
-          </p>
-        </div>
       </div>
     </div>
   );

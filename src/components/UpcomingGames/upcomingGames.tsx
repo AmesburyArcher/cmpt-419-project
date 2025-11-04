@@ -38,22 +38,18 @@ export function UpcomingGames({
   const predictions = useMemo(() => {
     if (!liveEvents || liveEvents.length === 0 || !model.isTrained()) return [];
 
-    // Get the features that the model was actually trained with
     const modelFeatures = model.getFeatureNames();
 
     return liveEvents
       .map((event) => {
-        // Map live event to model features using the model's feature list
         const features = mapLiveGameToFeatures(
           event,
-          modelFeatures, // Use model's features instead of selectedFeatures prop
+          modelFeatures,
           historicalGames,
         );
 
-        // Get model prediction
         const modelProbability = model.predictSingle(features);
 
-        // Get market odds
         const h2hMarket = event.bookmakers[0]?.markets.find(
           (m) => m.key === "h2h",
         );
@@ -66,21 +62,17 @@ export function UpcomingGames({
 
         if (!homeOutcome || !awayOutcome) return null;
 
-        // Calculate market probabilities
         const homeMarketProb = oddsToImpliedProbability(homeOutcome.price);
         const awayMarketProb = oddsToImpliedProbability(awayOutcome.price);
 
-        // De-vig
         const [homeDeVigProb, awayDeVigProb] = deVig([
           homeMarketProb,
           awayMarketProb,
         ]);
 
-        // Calculate EV
         const homeEV = calculateEV(modelProbability, homeOutcome.price);
         const awayEV = calculateEV(1 - modelProbability, awayOutcome.price);
 
-        // Kelly stake (for $1000 bankroll, quarter Kelly)
         const homeKelly = kellyStake(modelProbability, homeOutcome.price, 1000);
         const awayKelly = kellyStake(
           1 - modelProbability,
@@ -131,9 +123,8 @@ export function UpcomingGames({
     );
   }
 
-  // Filter for +EV opportunities
   const positiveEVBets = predictions.filter(
-    (p) => p.homeEV > 0.02 || p.awayEV > 0.02, // At least 2% edge
+    (p) => p.homeEV > 0.02 || p.awayEV > 0.02,
   );
 
   return (
@@ -150,7 +141,7 @@ export function UpcomingGames({
         {positiveEVBets.length > 0 && (
           <div className="mb-4 bg-green-50 border-2 border-green-200 rounded p-4">
             <p className="font-semibold text-green-800">
-              🎯 Found {positiveEVBets.length} potential +EV opportunities
+              Found {positiveEVBets.length} potential +EV opportunities
             </p>
           </div>
         )}
@@ -183,7 +174,6 @@ export function UpcomingGames({
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  {/* Home Team */}
                   <div className="bg-white p-3 rounded border">
                     <p className="font-semibold mb-2">{pred.homeTeam}</p>
                     <div className="space-y-1 text-sm">

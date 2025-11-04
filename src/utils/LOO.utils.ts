@@ -8,7 +8,7 @@ export interface LOOResult {
   game: NflGameInterface;
   baselineBrierScore: number;
   looBrierScore: number;
-  influence: number; // Negative = removing this point improves model
+  influence: number;
   baselineAccuracy: number;
   looAccuracy: number;
   accuracyDelta: number;
@@ -25,19 +25,16 @@ export async function performLOOAnalysis(
 ): Promise<LOOResult[]> {
   const results: LOOResult[] = [];
 
-  // Sort games chronologically for realistic evaluation
   const sortedGames = [...games].sort((a, b) => {
     if (a.season !== b.season) return a.season - b.season;
     return a.week - b.week;
   });
 
-  // If dataset is large, sample from most recent games (most relevant)
   const gamesToAnalyze =
     sampleSize && sortedGames.length > sampleSize
-      ? sortedGames.slice(-sampleSize) // Take most recent N games
+      ? sortedGames.slice(-sampleSize)
       : sortedGames.map((game, idx) => ({ game, originalIndex: idx }));
 
-  // Ensure we have the full list for proper indexing
   const gamesWithIndex = Array.isArray(gamesToAnalyze[0])
     ? gamesToAnalyze
     : gamesToAnalyze.map((game, idx) => ({
@@ -47,7 +44,6 @@ export async function performLOOAnalysis(
 
   console.log(`Starting LOO analysis on ${gamesWithIndex.length} games...`);
 
-  // Train baseline model on all data
   const { X: baselineX, y: baselineY } = prepareFeatures(
     sortedGames,
     selectedFeatures,
@@ -55,7 +51,6 @@ export async function performLOOAnalysis(
   const baselineModel = new LogisticRegressionModel();
   await baselineModel.train(baselineX, baselineY, selectedFeatures, 100);
 
-  // Calculate baseline metrics
   const baselinePredictions = baselineModel.predict(baselineX) as tf.Tensor;
   const baselinePredData = Array.from(await baselinePredictions.data());
   const yData = Array.from(await baselineY.data());
@@ -65,14 +60,11 @@ export async function performLOOAnalysis(
 
   baselinePredictions.dispose();
 
-  // Perform LOO for each game
   for (let i = 0; i < gamesWithIndex.length; i++) {
     const { game, originalIndex } = gamesWithIndex[i];
 
-    // Create dataset without this game
     const gamesWithoutI = sortedGames.filter((_, idx) => idx !== originalIndex);
 
-    // Train model without this game
     const { X: looX, y: looY } = prepareFeatures(
       gamesWithoutI,
       selectedFeatures,
@@ -80,16 +72,12 @@ export async function performLOOAnalysis(
     const looModel = new LogisticRegressionModel();
     await looModel.train(looX, looY, selectedFeatures, 100);
 
-    // Evaluate on full dataset
     const looPredictions = looModel.predict(baselineX) as tf.Tensor;
     const looPredData = Array.from(await looPredictions.data());
 
     const looBrierScore = calculateBrierScore(looPredData, yData);
     const looAccuracy = calculateAccuracy(looPredData, yData);
 
-    // Calculate influence
-    // Positive influence = removing this point makes model worse (important point)
-    // Negative influence = removing this point makes model better (outlier/noisy point)
     const influence = looBrierScore - baselineBrierScore;
     const accuracyDelta = looAccuracy - baselineAccuracy;
 
@@ -104,24 +92,20 @@ export async function performLOOAnalysis(
       accuracyDelta,
     });
 
-    // Cleanup
     looX.dispose();
     looY.dispose();
     looPredictions.dispose();
     looModel.dispose();
 
-    // Progress update
     if ((i + 1) % 10 === 0 || i === gamesToAnalyze.length - 1) {
       console.log(`LOO progress: ${i + 1}/${gamesWithIndex.length}`);
     }
   }
 
-  // Cleanup baseline
   baselineX.dispose();
   baselineY.dispose();
   baselineModel.dispose();
 
-  // Sort by influence (most influential first)
   results.sort((a, b) => Math.abs(b.influence) - Math.abs(a.influence));
 
   return results;
@@ -137,15 +121,12 @@ export function getInfluentialGames(
   mostInfluential: LOOResult[];
   mostOutlier: LOOResult[];
 } {
-  // Sort by influence magnitude
   const sortedByInfluence = [...looResults].sort(
     (a, b) => b.influence - a.influence,
   );
 
-  // Most influential = high positive influence (model gets worse without them)
   const mostInfluential = sortedByInfluence.slice(0, topN);
 
-  // Most outlier = high negative influence (model improves without them)
   const mostOutlier = sortedByInfluence.slice(-topN).reverse();
 
   return { mostInfluential, mostOutlier };
@@ -173,7 +154,6 @@ function sampleGames(
 ): Array<{ game: NflGameInterface; originalIndex: number }> {
   const indices = Array.from({ length: games.length }, (_, i) => i);
 
-  // Fisher-Yates shuffle
   for (let i = indices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [indices[i], indices[j]] = [indices[j], indices[i]];

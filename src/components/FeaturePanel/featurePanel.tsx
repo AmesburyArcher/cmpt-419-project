@@ -45,10 +45,8 @@ export function FeaturePanel({
 
     if (newFeatures.length === 0) return;
 
-    // Update features first
     onFeaturesChange(newFeatures);
 
-    // Then retrain if auto-retrain is enabled
     if (autoRetrain && historicalGames.length > 0) {
       await retrainModel(newFeatures);
     }

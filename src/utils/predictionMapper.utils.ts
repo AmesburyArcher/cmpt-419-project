@@ -12,7 +12,6 @@ export function mapLiveGameToFeatures(
 ): number[] {
   const features: number[] = [];
 
-  // Get spread and total from markets
   const spreadsMarket = event.bookmakers[0]?.markets.find(
     (m) => m.key === "spreads",
   );
@@ -24,7 +23,6 @@ export function mapLiveGameToFeatures(
     spreadsMarket?.outcomes.find((o) => o.name === event.home_team)?.point || 0;
   const total = totalsMarket?.outcomes[0]?.point || 0;
 
-  // Calculate estimated features from historical data
   const homeRecentGames = getRecentGames(event.home_team, historicalGames, 5);
   const awayRecentGames = getRecentGames(event.away_team, historicalGames, 5);
 
@@ -37,11 +35,10 @@ export function mapLiveGameToFeatures(
     rolling_form_away: calculateRollingForm(awayRecentGames, event.away_team),
     divisional: isDivisionalGame(event.home_team, event.away_team) ? 1 : 0,
     thursday_game: isThursdayGame(event.commence_time) ? 1 : 0,
-    international: 0, // Would need additional data
+    international: 0,
     travel_miles: estimateTravelMiles(event.away_team, event.home_team),
   };
 
-  // Map to feature array in correct order
   selectedFeatures.forEach((feature) => {
     features.push(estimatedFeatures[feature] || 0);
   });
@@ -60,7 +57,6 @@ function getRecentGames(
   return historicalGames
     .filter((game) => game.home_team === team || game.away_team === team)
     .sort((a, b) => {
-      // Sort by season and week descending
       if (a.season !== b.season) return b.season - a.season;
       return b.week - a.week;
     })
@@ -74,7 +70,7 @@ function calculateRollingForm(
   recentGames: NflGameInterface[],
   team: string,
 ): number {
-  if (recentGames.length === 0) return 0.5; // Default to neutral
+  if (recentGames.length === 0) return 0.5;
 
   const wins = recentGames.filter((game) => {
     const isHome = game.home_team === team;
@@ -93,18 +89,17 @@ function estimateRestDays(
 ): number {
   const recentGames = getRecentGames(team, historicalGames, 10);
 
-  if (recentGames.length === 0) return 7; // Default NFL rest
+  if (recentGames.length === 0) return 7;
 
-  const avgRestDays =
+  return (
     recentGames.reduce((sum, game) => {
       const restDays =
         game.home_team === team
           ? game.rest_days_home || 7
           : game.rest_days_away || 7;
       return sum + restDays;
-    }, 0) / recentGames.length;
-
-  return avgRestDays;
+    }, 0) / recentGames.length
+  );
 }
 
 /**
@@ -238,8 +233,7 @@ function estimateTravelMiles(awayTeam: string, homeTeam: string): number {
 
   if (!away || !home) return 0;
 
-  // Haversine formula for distance
-  const R = 3959; // Earth radius in miles
+  const R = 3959;
   const dLat = toRad(home.lat - away.lat);
   const dLng = toRad(home.lng - away.lng);
 

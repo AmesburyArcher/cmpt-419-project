@@ -41,13 +41,10 @@ export function FileUpload({
       setError("");
       setFileName(file.name);
 
-      // Parse CSV
       const games = await parseCSV(file);
-      console.log(`Loaded ${games.length} games`);
 
       onDataLoaded(games);
 
-      // Auto-train model
       await trainModel(games);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load file");
@@ -130,7 +127,6 @@ export function FileUpload({
           )}
         </div>
 
-        {/* Train/Test Settings */}
         <TrainTestSettingsPanel
           settings={trainTestSettings}
           onSettingsChange={setTrainTestSettings}

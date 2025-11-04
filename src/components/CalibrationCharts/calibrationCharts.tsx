@@ -18,7 +18,6 @@ export function CalibrationChart({ calibrationData }: CalibrationChartProps) {
       </p>
 
       <div className="relative w-full h-96 border-2 border-gray-300 rounded bg-gray-50">
-        {/* Perfect calibration line */}
         <svg className="absolute inset-0 w-full h-full">
           <line
             x1="0"
@@ -30,11 +29,10 @@ export function CalibrationChart({ calibrationData }: CalibrationChartProps) {
             strokeDasharray="5,5"
           />
 
-          {/* Plot points */}
           {calibrationData.map((point, idx) => {
             const x = `${point.predictedProb * 100}%`;
             const y = `${100 - point.actualProb * 100}%`;
-            const size = 4 + (point.count / maxCount) * 12; // Scale by count
+            const size = 4 + (point.count / maxCount) * 12;
 
             return (
               <g key={idx}>
@@ -62,7 +60,6 @@ export function CalibrationChart({ calibrationData }: CalibrationChartProps) {
           })}
         </svg>
 
-        {/* Axes labels */}
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-8">
           <p className="text-sm font-semibold text-gray-700">
             Predicted Probability →
@@ -75,7 +72,6 @@ export function CalibrationChart({ calibrationData }: CalibrationChartProps) {
         </div>
       </div>
 
-      {/* Legend */}
       <div className="mt-8 flex items-center justify-center gap-6 text-sm">
         <div className="flex items-center gap-2">
           <div className="w-4 h-0.5 bg-gray-400 border-dashed border-t-2"></div>
@@ -87,7 +83,6 @@ export function CalibrationChart({ calibrationData }: CalibrationChartProps) {
         </div>
       </div>
 
-      {/* Data table */}
       <div className="mt-6 overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-100">

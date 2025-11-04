@@ -28,6 +28,7 @@ export function LOOAnalysis({
     setProgress("Starting LOO analysis...");
 
     try {
+      setProgress("Performing LOO analysis...");
       const looResults = await performLOOAnalysis(
         historicalGames,
         selectedFeatures,
@@ -62,10 +63,9 @@ export function LOOAnalysis({
 
       <div className="bg-yellow-50 border border-yellow-200 rounded p-4 mb-4">
         <p className="text-sm text-yellow-800">
-          <strong>⚠️ Warning:</strong> LOO analysis is computationally
-          expensive. For {historicalGames.length} games, this will train{" "}
-          {Math.min(sampleSize, historicalGames.length)} models. Consider using
-          a sample size of 50-100 games for initial testing.
+          LOO analysis is computationally expensive. For{" "}
+          {historicalGames.length} games, this will train{" "}
+          {Math.min(sampleSize, historicalGames.length)} models.
         </p>
       </div>
 
@@ -108,10 +108,9 @@ export function LOOAnalysis({
 
       {results && (
         <div className="space-y-6">
-          {/* Most Influential Games */}
           <div>
             <h3 className="text-xl font-semibold mb-3 text-green-700">
-              🎯 Top 5 Most Influential Games
+              Top 5 Most Influential Games
             </h3>
             <p className="text-sm text-gray-600 mb-3">
               These games are most important for model performance. Removing
@@ -129,10 +128,9 @@ export function LOOAnalysis({
             </div>
           </div>
 
-          {/* Most Outlier Games */}
           <div>
             <h3 className="text-xl font-semibold mb-3 text-red-700">
-              ⚠️ Top 5 Most Problematic Games (Outliers)
+              Top 5 Most Problematic Games (Outliers)
             </h3>
             <p className="text-sm text-gray-600 mb-3">
               These games hurt model performance. Removing them improves the
@@ -200,7 +198,6 @@ function GameCard({ result, rank, type }: GameCardProps) {
               isInfluential ? "text-green-700" : "text-red-700"
             }`}
           >
-            {result.influence > 0 ? "+" : ""}
             {(result.influence * 1000).toFixed(2)}
           </div>
           <div className="text-xs text-gray-500">Influence (×1000)</div>

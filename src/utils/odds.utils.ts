@@ -41,7 +41,7 @@ export function deVig(probabilities: number[]): number[] {
  */
 export function calculateEV(trueProbability: number, odds: number): number {
   const decimal = americanToDecimal(odds);
-  const payout = decimal - 1; // Net payout multiplier
+  const payout = decimal - 1;
   return trueProbability * payout - (1 - trueProbability);
 }
 

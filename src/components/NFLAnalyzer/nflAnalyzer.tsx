@@ -11,12 +11,9 @@ import { LOOAnalysis } from "@/components/LOOAnalysis";
 import { TrainTestSettings } from "@/components/TrainTestSettings";
 
 export function NFLAnalyzer() {
-  // Historical data state
   const [historicalGames, setHistoricalGames] = useState<NflGameInterface[]>(
     [],
   );
-
-  // Model state
   const [model, setModel] = useState<LogisticRegressionModel | null>(null);
   const [modelVersion, setModelVersion] = useState<number>(0);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([
@@ -29,7 +26,6 @@ export function NFLAnalyzer() {
   ]);
   const [isTraining, setIsTraining] = useState(false);
 
-  // Train/Test settings state
   const [trainTestSettings, setTrainTestSettings] = useState<TrainTestSettings>(
     {
       splitMethod: "time-based",
@@ -38,7 +34,6 @@ export function NFLAnalyzer() {
     },
   );
 
-  // Metrics state
   const [metrics, setMetrics] = useState<{
     brierScore: number;
     accuracy: number;
@@ -60,7 +55,6 @@ export function NFLAnalyzer() {
           <DataBuilder />
         </section>
 
-        {/* Step 1: Upload Historical Data */}
         <section className="mb-8">
           <FileUpload
             onDataLoaded={setHistoricalGames}
@@ -77,7 +71,6 @@ export function NFLAnalyzer() {
 
         {historicalGames.length > 0 && (
           <>
-            {/* Step 2: Feature Selection */}
             <section className="mb-8">
               <FeaturePanel
                 selectedFeatures={selectedFeatures}
@@ -94,7 +87,6 @@ export function NFLAnalyzer() {
               />
             </section>
 
-            {/* Step 3: Model Performance */}
             {metrics && (
               <section className="mb-8">
                 <ModelMetrics metrics={metrics} />
@@ -102,7 +94,6 @@ export function NFLAnalyzer() {
               </section>
             )}
 
-            {/* Step 3.5: Data Quality Analysis */}
             <section className="mb-8">
               <LOOAnalysis
                 historicalGames={historicalGames}
@@ -110,7 +101,6 @@ export function NFLAnalyzer() {
               />
             </section>
 
-            {/* Step 4: Live Predictions */}
             {model && (
               <section className="mb-8">
                 <UpcomingGames

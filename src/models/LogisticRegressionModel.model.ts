@@ -47,7 +47,6 @@ export class LogisticRegressionModel {
       },
     });
 
-    // Get final epoch metrics
     const finalEpoch = history.history.loss.length - 1;
     return {
       trainLoss: history.history.loss[finalEpoch] as number,
@@ -70,14 +69,11 @@ export class LogisticRegressionModel {
   predictSingle(features: number[]): number {
     if (!this.model) throw new Error("Model not trained");
 
-    // Convert features array to tensor
     const X = tf.tensor2d([features]);
 
-    // Get prediction
     const prediction = this.model.predict(X) as tf.Tensor;
     const probability = prediction.dataSync()[0];
 
-    // Clean up tensors
     X.dispose();
     prediction.dispose();
 
