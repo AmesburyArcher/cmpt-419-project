@@ -9,7 +9,12 @@ export class LogisticRegressionModel {
     y: tf.Tensor2D,
     featureNames: string[],
     epochs: number = 100,
-  ) {
+  ): Promise<{
+    trainLoss: number;
+    trainAccuracy: number;
+    valLoss: number;
+    valAccuracy: number;
+  }> {
     this.featureNames = featureNames;
 
     this.model = tf.sequential({
@@ -29,16 +34,27 @@ export class LogisticRegressionModel {
       metrics: ["accuracy"],
     });
 
-    await this.model.fit(X, y, {
+    const history = await this.model.fit(X, y, {
       epochs,
       batchSize: 32,
       validationSplit: 0.2,
       callbacks: {
         onEpochEnd: (epoch, logs) => {
-          console.log(`Epoch ${epoch}: loss = ${logs?.loss.toFixed(4)}`);
+          console.log(
+            `Epoch ${epoch}: loss = ${logs?.loss.toFixed(4)}, val_loss = ${logs?.val_loss?.toFixed(4)}`,
+          );
         },
       },
     });
+
+    // Get final epoch metrics
+    const finalEpoch = history.history.loss.length - 1;
+    return {
+      trainLoss: history.history.loss[finalEpoch] as number,
+      trainAccuracy: history.history.acc[finalEpoch] as number,
+      valLoss: history.history.val_loss?.[finalEpoch] as number,
+      valAccuracy: history.history.val_acc?.[finalEpoch] as number,
+    };
   }
 
   predict(X: tf.Tensor2D): tf.Tensor {

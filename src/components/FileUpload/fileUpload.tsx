@@ -1,10 +1,12 @@
 import { useState } from "react";
-import * as tf from "@tensorflow/tfjs";
 import { LogisticRegressionModel } from "@/models/LogisticRegressionModel.model.ts";
 import { NflGameInterface } from "@/interfaces/nflGame.interface.ts";
 import { parseCSV } from "@/utils/parsing.utils.ts";
-import { prepareFeatures } from "@/utils/features.utils.ts";
-import { calculateCalibration, trainModelUtil } from "@/utils/model.utils.ts";
+import { trainModelUtil } from "@/utils/model.utils.ts";
+import {
+  TrainTestSettingsPanel,
+  TrainTestSettings,
+} from "@/components/TrainTestSettings";
 
 interface FileUploadProps {
   onDataLoaded: (games: NflGameInterface[]) => void;
@@ -23,6 +25,13 @@ export function FileUpload({
 }: FileUploadProps) {
   const [fileName, setFileName] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [trainTestSettings, setTrainTestSettings] = useState<TrainTestSettings>(
+    {
+      splitMethod: "time-based",
+      testSize: 0.2,
+      randomSeed: undefined,
+    },
+  );
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,11 +66,25 @@ export function FileUpload({
         X,
         y,
         predictions,
-      } = await trainModelUtil(games, selectedFeatures);
+        trainBrierScore,
+        trainAccuracy,
+        valBrierScore,
+        valAccuracy,
+      } = await trainModelUtil(
+        games,
+        selectedFeatures,
+        trainTestSettings.testSize,
+        trainTestSettings.splitMethod,
+        trainTestSettings.randomSeed,
+      );
 
       onModelTrained(model, {
         brierScore,
         accuracy,
+        trainBrierScore,
+        trainAccuracy,
+        valBrierScore,
+        valAccuracy,
         calibrationData,
       });
 
@@ -106,6 +129,13 @@ export function FileUpload({
             <p className="text-sm text-green-600 mt-2">✓ Loaded: {fileName}</p>
           )}
         </div>
+
+        {/* Train/Test Settings */}
+        <TrainTestSettingsPanel
+          settings={trainTestSettings}
+          onSettingsChange={setTrainTestSettings}
+          disabled={isTraining}
+        />
 
         {isTraining && (
           <div className="flex items-center gap-2 text-blue-600">

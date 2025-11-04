@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NflGameInterface } from "@/interfaces/nflGame.interface.ts";
 import { LogisticRegressionModel } from "@/models/LogisticRegressionModel.model.ts";
 import { trainModelUtil } from "@/utils/model.utils.ts";
+import { TrainTestSettings } from "@/components/TrainTestSettings";
 
 const AVAILABLE_FEATURES = [
   { key: "spread", label: "Point Spread", category: "Market" },
@@ -23,6 +24,7 @@ interface FeaturePanelProps {
   onRetrain: (model: LogisticRegressionModel, metrics: any) => void;
   isTraining: boolean;
   setIsTraining: (training: boolean) => void;
+  trainTestSettings: TrainTestSettings;
 }
 
 export function FeaturePanel({
@@ -32,6 +34,7 @@ export function FeaturePanel({
   onRetrain,
   isTraining,
   setIsTraining,
+  trainTestSettings,
 }: FeaturePanelProps) {
   const [autoRetrain, setAutoRetrain] = useState(true);
 
@@ -42,14 +45,21 @@ export function FeaturePanel({
 
     if (newFeatures.length === 0) return;
 
+    // Update features first
     onFeaturesChange(newFeatures);
 
-    if (autoRetrain) {
+    // Then retrain if auto-retrain is enabled
+    if (autoRetrain && historicalGames.length > 0) {
       await retrainModel(newFeatures);
     }
   };
 
   const retrainModel = async (features: string[]) => {
+    if (historicalGames.length === 0) {
+      console.warn("No historical games available for training");
+      return;
+    }
+
     setIsTraining(true);
 
     try {
@@ -61,9 +71,27 @@ export function FeaturePanel({
         X,
         y,
         predictions,
-      } = await trainModelUtil(historicalGames, features);
+        trainBrierScore,
+        trainAccuracy,
+        valBrierScore,
+        valAccuracy,
+      } = await trainModelUtil(
+        historicalGames,
+        features,
+        trainTestSettings.testSize,
+        trainTestSettings.splitMethod,
+        trainTestSettings.randomSeed,
+      );
 
-      onRetrain(model, { brierScore, accuracy, calibrationData });
+      onRetrain(model, {
+        brierScore,
+        accuracy,
+        trainBrierScore,
+        trainAccuracy,
+        valBrierScore,
+        valAccuracy,
+        calibrationData,
+      });
 
       X.dispose();
       y.dispose();

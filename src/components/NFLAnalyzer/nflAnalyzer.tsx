@@ -7,6 +7,8 @@ import { ModelMetrics } from "@/components/ModelMetrics/modelMetrics.tsx";
 import { CalibrationChart } from "@/components/CalibrationCharts";
 import { UpcomingGames } from "@/components/UpcomingGames";
 import { DataBuilder } from "@/components/DataBuilder";
+import { LOOAnalysis } from "@/components/LOOAnalysis";
+import { TrainTestSettings } from "@/components/TrainTestSettings";
 
 export function NFLAnalyzer() {
   // Historical data state
@@ -27,10 +29,23 @@ export function NFLAnalyzer() {
   ]);
   const [isTraining, setIsTraining] = useState(false);
 
+  // Train/Test settings state
+  const [trainTestSettings, setTrainTestSettings] = useState<TrainTestSettings>(
+    {
+      splitMethod: "time-based",
+      testSize: 0.2,
+      randomSeed: undefined,
+    },
+  );
+
   // Metrics state
   const [metrics, setMetrics] = useState<{
     brierScore: number;
     accuracy: number;
+    trainBrierScore?: number;
+    trainAccuracy?: number;
+    valBrierScore?: number;
+    valAccuracy?: number;
     calibrationData: Array<{
       predictedProb: number;
       actualProb: number;
@@ -75,6 +90,7 @@ export function NFLAnalyzer() {
                 }}
                 isTraining={isTraining}
                 setIsTraining={setIsTraining}
+                trainTestSettings={trainTestSettings}
               />
             </section>
 
@@ -85,6 +101,14 @@ export function NFLAnalyzer() {
                 <CalibrationChart calibrationData={metrics.calibrationData} />
               </section>
             )}
+
+            {/* Step 3.5: Data Quality Analysis */}
+            <section className="mb-8">
+              <LOOAnalysis
+                historicalGames={historicalGames}
+                selectedFeatures={selectedFeatures}
+              />
+            </section>
 
             {/* Step 4: Live Predictions */}
             {model && (
