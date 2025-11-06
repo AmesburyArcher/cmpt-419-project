@@ -1,5 +1,12 @@
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider.tsx";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 export interface TrainTestSettings {
   splitMethod: "time-based" | "random";
@@ -28,17 +35,19 @@ export function TrainTestSettingsPanel({
   };
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-      <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-        <span>Train/Test Split Settings</span>
-      </h3>
+    <Card className="bg-accent rounded-lg p-4 border border-border">
+      <CardHeader>
+        <CardTitle className="font-bold text-lg text-text-secondary">
+          Train/Test Split Settings
+        </CardTitle>
+      </CardHeader>
 
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+      <CardContent className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <label className="block font-medium text-text-secondary">
             Split Method
           </label>
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
             <label className="flex items-start gap-3 p-3 border-2 rounded-lg cursor-pointer hover:bg-white transition-colors">
               <input
                 type="radio"
@@ -53,13 +62,14 @@ export function TrainTestSettingsPanel({
                 disabled={disabled}
                 className="mt-1"
               />
-              <div className="flex-1">
-                <div className="font-semibold text-gray-800">Time-Based</div>
-                <p className="text-xs text-gray-600 mt-1">
-                  Train on older games, test on newer games. Most realistic for
-                  betting since you're predicting future games.
+              <div className="flex-1 flex flex-col gap-1">
+                <div className="font-semibold text-text-secondary">
+                  Time-Based
+                </div>
+                <p className="text-xs text-text-secondary">
+                  Train on older games, test on newer games.
                 </p>
-                <p className="text-xs text-blue-600 mt-1">
+                <p className="text-xs text-text-accent">
                   Example: Train on 2020-2023, test on 2024
                 </p>
               </div>
@@ -79,13 +89,12 @@ export function TrainTestSettingsPanel({
                 disabled={disabled}
                 className="mt-1"
               />
-              <div className="flex-1">
+              <div className="flex-1 flex flex-col gap-1">
                 <div className="font-semibold text-gray-800">Random Split</div>
-                <p className="text-xs text-gray-600 mt-1">
-                  Randomly shuffle games before splitting. Useful for general
-                  performance testing but less realistic for time-series data.
+                <p className="text-xs text-text-secondary">
+                  Randomly shuffle games before splitting.
                 </p>
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-xs text-text-secondary">
                   Can use a seed for reproducible splits.
                 </p>
               </div>
@@ -93,32 +102,34 @@ export function TrainTestSettingsPanel({
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="flex flex-col gap-2">
+          <label className="block text-sm font-medium text-text-secondary">
             Test Set Size
           </label>
-          <div className="flex items-center gap-3">
-            <Slider
-              min={10}
-              max={40}
-              step={5}
-              value={[localSettings.testSize * 100]}
-              onValueChange={(e) => handleChange({ testSize: e?.[0] / 100 })}
-              disabled={disabled}
-              className="flex-1"
-            />
+          <div className="flex items-start gap-3">
+            <div className="flex flex-col gap-2 w-full">
+              <Slider
+                min={10}
+                max={40}
+                step={5}
+                value={[localSettings.testSize * 100]}
+                onValueChange={(e) => handleChange({ testSize: e?.[0] / 100 })}
+                disabled={disabled}
+                className="flex-1"
+              />
+              <p className="text-xs text-text-secondary">
+                Percentage of data reserved for testing.
+              </p>
+            </div>
             <span className="font-mono font-semibold text-gray-700 w-12">
               {(localSettings.testSize * 100).toFixed(0)}%
             </span>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
-            Percentage of data reserved for testing. Typical: 20%
-          </p>
         </div>
 
         {localSettings.splitMethod === "random" && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="flex flex-col gap-2">
+            <label className="block text-sm font-medium text-text-secondary">
               Random Seed (Optional)
             </label>
             <div className="flex items-center gap-2">
@@ -134,33 +145,33 @@ export function TrainTestSettingsPanel({
                 }
                 placeholder="Leave empty for random"
                 disabled={disabled}
-                className="border rounded px-3 py-2 text-sm flex-1"
+                className="border rounded px-3 py-2 text-sm flex-1 bg-white"
               />
-              <button
+              <Button
                 onClick={() =>
                   handleChange({
                     randomSeed: Math.floor(Math.random() * 10000),
                   })
                 }
                 disabled={disabled}
-                className="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm font-medium disabled:opacity-50"
+                variant="outline"
               >
                 Generate
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => handleChange({ randomSeed: undefined })}
                 disabled={disabled}
-                className="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded text-sm font-medium disabled:opacity-50"
+                variant="outline"
               >
                 Clear
-              </button>
+              </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-text-secondary">
               Use a seed to get the same split every time
             </p>
           </div>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

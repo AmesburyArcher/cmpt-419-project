@@ -7,6 +7,13 @@ import {
   TrainTestSettingsPanel,
   TrainTestSettings,
 } from "@/components/TrainTestSettings";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.tsx";
 
 interface FileUploadProps {
   onDataLoaded: (games: NflGameInterface[]) => void;
@@ -96,37 +103,39 @@ export function FileUpload({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-2xl font-semibold mb-4">
-        Step 1: Upload Historical Data
-      </h2>
-
-      <div className="space-y-4">
-        <div>
-          <label className="block mb-2">
-            <span className="text-gray-700">
-              Upload CSV file with historical NFL games
-            </span>
-            <input
-              type="file"
-              accept=".csv"
-              onChange={handleFileUpload}
-              className="mt-1 block w-full text-sm text-gray-500
+    <Card className="bg-white rounded-lg shadow p-6">
+      <CardHeader>
+        <CardTitle className="text-2xl font-semibold">
+          Step 1: Upload Historical Data
+        </CardTitle>
+        <CardDescription className="flex flex-col gap-2">
+          <span className="text-text-secondary">
+            Upload CSV file with historical NFL games
+          </span>
+          <div>
+            <label className="block">
+              <input
+                type="file"
+                accept=".csv"
+                onChange={handleFileUpload}
+                className="block w-full text-sm text-gray-500
                 file:mr-4 file:py-2 file:px-4
                 file:rounded-md file:border-0
                 file:text-sm file:font-semibold
-                file:bg-blue-50 file:text-blue-700
-                hover:file:bg-blue-100
+                file:bg-primary file:text-primary-foreground hover:file:bg-primary/90
                 cursor-pointer"
-              disabled={isTraining}
-            />
-          </label>
+                disabled={isTraining}
+              />
+            </label>
 
-          {fileName && (
-            <p className="text-sm text-green-600 mt-2">✓ Loaded: {fileName}</p>
-          )}
-        </div>
+            {fileName && (
+              <p className="text-sm text-success">✓ Loaded: {fileName}</p>
+            )}
+          </div>
+        </CardDescription>
+      </CardHeader>
 
+      <CardContent className="flex flex-col gap-4">
         <TrainTestSettingsPanel
           settings={trainTestSettings}
           onSettingsChange={setTrainTestSettings}
@@ -134,25 +143,27 @@ export function FileUpload({
         />
 
         {isTraining && (
-          <div className="flex items-center gap-2 text-blue-600">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+          <div className="flex items-center gap-2 text-text-accent">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent"></div>
             <span>Training model...</span>
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded">{error}</div>
+          <div className="bg-error-background text-text-error p-3 rounded">
+            {error}
+          </div>
         )}
 
-        <div className="bg-blue-50 p-4 rounded text-sm">
-          <p className="font-semibold mb-2">Expected CSV format:</p>
+        <div className="bg-accent-secondary p-4 rounded text-sm flex flex-col gap-2">
+          <p className="font-semibold">Expected CSV format:</p>
           <code className="text-xs bg-white p-2 block rounded">
             season,week,home_team,away_team,home_win,spread,total,
             rest_days_home,rest_days_away,rolling_form_home,rolling_form_away,
             divisional,thursday_game,international,travel_miles
           </code>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
