@@ -49,12 +49,18 @@
   --sidebar-border: oklch(0.928 0.006 264.531);
   --sidebar-ring: oklch(0.707 0.022 261.325);
     --success: var(--color-green-600);
+    --success-background: var(--color-green-50);
+    --success-border: var(--color-green-200);
     --text-primary: var(--color-black);
     --text-secondary: var(--color-gray-700);
     --text-accent: var(--color-blue-600);
     --text-error: var(--color-red-600);
     --error-background: var(--color-red-100);
+    --error-border: var(--color-red-200);
     --accent-secondary: var(--color-blue-50);
+    --text-info: var(--color-yellow-800);
+    --info-border: var(--color-yellow-200);
+    --info-background: var(--color-yellow-50);
 }
 
 
@@ -82,7 +88,13 @@
     --color-success: var(--success);
     --color-text-error: var(--text-error);
     --color-error-background: var(--error-background);
+    --color-error-border: var(--error-background);
     --color-accent-secondary: var(--accent-secondary);
+    --color-success-background: var(--success-background);
+    --color-success-border: var(--success-border);
+    --color-info-background: var(--info-background);
+    --color-info-border: var(--info-border);
+    --color-text-info: var(--text-info);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

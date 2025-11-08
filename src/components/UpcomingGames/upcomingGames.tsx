@@ -10,6 +10,13 @@ import {
   kellyStake,
   oddsToImpliedProbability,
 } from "@/utils/odds.utils.ts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.tsx";
 
 interface UpcomingGamesProps {
   model: LogisticRegressionModel;
@@ -104,19 +111,21 @@ export function UpcomingGames({
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex items-center gap-2">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-          <span>Loading upcoming games...</span>
-        </div>
-      </div>
+      <Card className="bg-white rounded-lg shadow p-6">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-text-accent"></div>
+            <span>Loading upcoming games...</span>
+          </div>
+        </CardHeader>
+      </Card>
     );
   }
 
   if (error) {
     return (
       <div className="bg-white rounded-lg shadow p-6">
-        <div className="bg-red-50 text-red-600 p-4 rounded">
+        <div className="bg-error-background text-text-error p-4 rounded">
           Error loading odds: {error.message}
         </div>
       </div>
@@ -128,94 +137,99 @@ export function UpcomingGames({
   );
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-semibold mb-4">
+    <Card className="bg-white rounded-lg shadow p-6">
+      <CardHeader>
+        <CardTitle className="text-2xl font-semibold">
           Step 3: Live Predictions
-        </h2>
-        <p className="text-gray-600 mb-4">
+        </CardTitle>
+        <CardDescription className="text-text-secondary">
           Model predictions vs current market odds. Positive EV bets are
           highlighted.
-        </p>
-
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
         {positiveEVBets.length > 0 && (
-          <div className="mb-4 bg-green-50 border-2 border-green-200 rounded p-4">
-            <p className="font-semibold text-green-800">
+          <div className="mb-4 bg-success-background border-2 border-success-border rounded p-4">
+            <p className="font-semibold text-success">
               Found {positiveEVBets.length} potential +EV opportunities
             </p>
           </div>
         )}
 
-        <div className="space-y-4">
+        <div className="flex flex-col gap-4">
           {predictions.map((pred, idx) => {
             const hasEdge = pred.homeEV > 0.02 || pred.awayEV > 0.02;
 
             return (
               <div
                 key={idx}
-                className={`border-2 rounded-lg p-4 ${
-                  hasEdge ? "border-green-300 bg-green-50" : "border-gray-200"
+                className={`border-2 rounded-lg p-4 flex flex-col gap-3 ${
+                  hasEdge
+                    ? "border-success-border bg-success-background"
+                    : "border-muted"
                 }`}
               >
-                <div className="flex justify-between items-start mb-3">
+                <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-lg font-bold">
                       {pred.awayTeam} @ {pred.homeTeam}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-text-secondary">
                       {new Date(pred.commenceTime).toLocaleString()}
                     </p>
                   </div>
                   {hasEdge && (
-                    <span className="bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold">
+                    <span className="bg-success text-white px-3 py-1 rounded text-sm font-semibold">
                       +EV
                     </span>
                   )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white p-3 rounded border">
+                  <div className="bg-white p-3 rounded border border-muted">
                     <p className="font-semibold mb-2">{pred.homeTeam}</p>
-                    <div className="space-y-1 text-sm">
+                    <div className="flex flex-col gap-1 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Model:</span>
+                        <span className="text-text-secondary">Model:</span>
                         <span className="font-mono font-bold">
                           {(pred.modelProbability * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Market:</span>
+                        <span className="text-text-secondary">Market:</span>
                         <span className="font-mono">
                           {(pred.homeMarketProb * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">De-vig:</span>
+                        <span className="text-text-secondary">De-vig:</span>
                         <span className="font-mono">
                           {(pred.homeDeVigProb * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between border-t pt-1">
-                        <span className="text-gray-600">Odds:</span>
+                        <span className="text-text-secondary">Odds:</span>
                         <span className="font-mono font-bold">
                           {pred.homeOdds > 0 ? "+" : ""}
                           {pred.homeOdds}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">EV:</span>
+                        <span className="text-text-secondary">EV:</span>
                         <span
                           className={`font-mono font-bold ${
-                            pred.homeEV > 0 ? "text-green-600" : "text-red-600"
+                            pred.homeEV > 0 ? "text-success" : "text-text-error"
                           }`}
                         >
                           {(pred.homeEV * 100).toFixed(2)}%
                         </span>
                       </div>
                       {pred.homeEV > 0 && (
-                        <div className="flex justify-between bg-blue-50 p-1 rounded">
-                          <span className="text-gray-600">Kelly (¼):</span>
-                          <span className="font-mono font-bold text-blue-600">
+                        <div className="flex justify-between bg-accent-secondary p-1 rounded">
+                          <span className="text-text-secondary">
+                            Kelly (¼):
+                          </span>
+                          <span className="font-mono font-bold text-text-accent">
                             ${pred.homeKelly.toFixed(2)}
                           </span>
                         </div>
@@ -223,49 +237,50 @@ export function UpcomingGames({
                     </div>
                   </div>
 
-                  {/* Away Team */}
-                  <div className="bg-white p-3 rounded border">
+                  <div className="bg-white p-3 rounded border border-muted">
                     <p className="font-semibold mb-2">{pred.awayTeam}</p>
-                    <div className="space-y-1 text-sm">
+                    <div className="flex flex-col gap-1 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Model:</span>
+                        <span className="text-text-secondary">Model:</span>
                         <span className="font-mono font-bold">
                           {((1 - pred.modelProbability) * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Market:</span>
+                        <span className="text-text-secondary">Market:</span>
                         <span className="font-mono">
                           {(pred.awayMarketProb * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">De-vig:</span>
+                        <span className="text-text-secondary">De-vig:</span>
                         <span className="font-mono">
                           {(pred.awayDeVigProb * 100).toFixed(1)}%
                         </span>
                       </div>
                       <div className="flex justify-between border-t pt-1">
-                        <span className="text-gray-600">Odds:</span>
+                        <span className="text-text-secondary">Odds:</span>
                         <span className="font-mono font-bold">
                           {pred.awayOdds > 0 ? "+" : ""}
                           {pred.awayOdds}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600">EV:</span>
+                        <span className="text-text-secondary">EV:</span>
                         <span
                           className={`font-mono font-bold ${
-                            pred.awayEV > 0 ? "text-green-600" : "text-red-600"
+                            pred.awayEV > 0 ? "text-success" : "text-text-error"
                           }`}
                         >
                           {(pred.awayEV * 100).toFixed(2)}%
                         </span>
                       </div>
                       {pred.awayEV > 0 && (
-                        <div className="flex justify-between bg-blue-50 p-1 rounded">
-                          <span className="text-gray-600">Kelly (¼):</span>
-                          <span className="font-mono font-bold text-blue-600">
+                        <div className="flex justify-between bg-accent-secondary p-1 rounded">
+                          <span className="text-text-secondary">
+                            Kelly (¼):
+                          </span>
+                          <span className="font-mono font-bold text-text-accent">
                             ${pred.awayKelly.toFixed(2)}
                           </span>
                         </div>
@@ -277,7 +292,7 @@ export function UpcomingGames({
             );
           })}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

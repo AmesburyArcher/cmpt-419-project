@@ -50,12 +50,12 @@ export function NFLAnalyzer() {
 
   return (
     <div>
-      <div className="max-w-7xl mx-auto p-6">
-        <section className="mb-8">
+      <div className="max-w-7xl mx-auto p-6 flex flex-col gap-8">
+        <section>
           <DataBuilder />
         </section>
 
-        <section className="mb-8">
+        <section>
           <FileUpload
             onDataLoaded={setHistoricalGames}
             onModelTrained={(trainedModel, trainingMetrics) => {
@@ -71,7 +71,7 @@ export function NFLAnalyzer() {
 
         {historicalGames.length > 0 && (
           <>
-            <section className="mb-8">
+            <section>
               <FeaturePanel
                 selectedFeatures={selectedFeatures}
                 onFeaturesChange={setSelectedFeatures}
@@ -88,13 +88,13 @@ export function NFLAnalyzer() {
             </section>
 
             {metrics && (
-              <section className="mb-8">
+              <section className="flex flex-col gap-6">
                 <ModelMetrics metrics={metrics} />
                 <CalibrationChart calibrationData={metrics.calibrationData} />
               </section>
             )}
 
-            <section className="mb-8">
+            <section>
               <LOOAnalysis
                 historicalGames={historicalGames}
                 selectedFeatures={selectedFeatures}
@@ -102,7 +102,7 @@ export function NFLAnalyzer() {
             </section>
 
             {model && (
-              <section className="mb-8">
+              <section>
                 <UpcomingGames
                   model={model}
                   selectedFeatures={selectedFeatures}

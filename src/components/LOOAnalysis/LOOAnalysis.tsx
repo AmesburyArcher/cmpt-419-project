@@ -5,6 +5,14 @@ import {
   LOOResult,
   performLOOAnalysis,
 } from "@/utils/LOO.utils.ts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 interface LOOAnalysisProps {
   historicalGames: NflGameInterface[];
@@ -51,105 +59,109 @@ export function LOOAnalysis({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-2xl font-semibold mb-4">
-        Leave-One-Out (LOO) Analysis
-      </h2>
+    <Card className="bg-white rounded-lg shadow p-6">
+      <CardHeader>
+        <CardTitle className="text-2xl font-semibold">
+          Leave-One-Out (LOO) Analysis
+        </CardTitle>
 
-      <p className="text-gray-600 mb-4">
-        Identifies which data points are most influential (important) or most
-        problematic (outliers) in your training data.
-      </p>
+        <CardDescription className="text-text-secondary">
+          Identifies which data points are most influential (important) or most
+          problematic (outliers) in your training data.
+        </CardDescription>
+      </CardHeader>
 
-      <div className="bg-yellow-50 border border-yellow-200 rounded p-4 mb-4">
-        <p className="text-sm text-yellow-800">
-          LOO analysis is computationally expensive. For{" "}
-          {historicalGames.length} games, this will train{" "}
-          {Math.min(sampleSize, historicalGames.length)} models.
-        </p>
-      </div>
-
-      <div className="flex items-center gap-4 mb-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Sample Size
-          </label>
-          <input
-            type="number"
-            min="10"
-            max={historicalGames.length}
-            value={sampleSize}
-            onChange={(e) => setSampleSize(parseInt(e.target.value))}
-            className="border rounded px-3 py-2 w-24"
-            disabled={isAnalyzing}
-          />
-          <p className="text-xs text-gray-500 mt-1">
-            Random sample from {historicalGames.length} total games
+      <CardContent className="flex flex-col gap-4">
+        <div className="bg-info-background border border-info-border rounded p-4">
+          <p className="text-sm text-text-info">
+            LOO analysis is computationally expensive. For{" "}
+            {historicalGames.length} games, this will train{" "}
+            {Math.min(sampleSize, historicalGames.length)} models.
           </p>
         </div>
 
-        <div className="flex-1">
-          <button
-            onClick={runAnalysis}
-            disabled={isAnalyzing || historicalGames.length === 0}
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {isAnalyzing ? "Analyzing..." : "Run LOO Analysis"}
-          </button>
-        </div>
-      </div>
-
-      {isAnalyzing && (
-        <div className="mb-6 flex items-center gap-2 text-blue-600">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-          <span>{progress}</span>
-        </div>
-      )}
-
-      {results && (
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-xl font-semibold mb-3 text-green-700">
-              Top 5 Most Influential Games
-            </h3>
-            <p className="text-sm text-gray-600 mb-3">
-              These games are most important for model performance. Removing
-              them makes the model significantly worse.
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="block text-sm font-medium text-text-secondary">
+              Sample Size
+            </label>
+            <input
+              type="number"
+              min="10"
+              max={historicalGames.length}
+              value={sampleSize}
+              onChange={(e) => setSampleSize(parseInt(e.target.value))}
+              className="border rounded px-3 py-2 w-24"
+              disabled={isAnalyzing}
+            />
+            <p className="text-xs text-text-secondary">
+              Random sample from {historicalGames.length} total games
             </p>
-            <div className="space-y-2">
-              {results.mostInfluential.map((result, idx) => (
-                <GameCard
-                  key={result.gameIndex}
-                  result={result}
-                  rank={idx + 1}
-                  type="influential"
-                />
-              ))}
-            </div>
           </div>
 
-          <div>
-            <h3 className="text-xl font-semibold mb-3 text-red-700">
-              Top 5 Most Problematic Games (Outliers)
-            </h3>
-            <p className="text-sm text-gray-600 mb-3">
-              These games hurt model performance. Removing them improves the
-              model, suggesting they may be outliers or mislabeled.
-            </p>
-            <div className="space-y-2">
-              {results.mostOutlier.map((result, idx) => (
-                <GameCard
-                  key={result.gameIndex}
-                  result={result}
-                  rank={idx + 1}
-                  type="outlier"
-                />
-              ))}
-            </div>
+          <div className="flex-1">
+            <Button
+              onClick={runAnalysis}
+              disabled={isAnalyzing || historicalGames.length === 0}
+              variant="outline"
+            >
+              {isAnalyzing ? "Analyzing..." : "Run LOO Analysis"}
+            </Button>
           </div>
         </div>
-      )}
-    </div>
+
+        {isAnalyzing && (
+          <div className="flex items-center gap-2 text-text-accent">
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-text-accent"></div>
+            <span>{progress}</span>
+          </div>
+        )}
+
+        {results && (
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
+              <h3 className="text-xl font-semibold mb-3 text-success">
+                Top 5 Most Influential Games
+              </h3>
+              <p className="text-sm text-text-secondary">
+                These games are most important for model performance. Removing
+                them makes the model significantly worse.
+              </p>
+              <div className="flex flex-col gap-2">
+                {results.mostInfluential.map((result, idx) => (
+                  <GameCard
+                    key={result.gameIndex}
+                    result={result}
+                    rank={idx + 1}
+                    type="influential"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <h3 className="text-xl font-semibold text-text-error">
+                Top 5 Most Problematic Games (Outliers)
+              </h3>
+              <p className="text-sm text-text-secondary">
+                These games hurt model performance. Removing them improves the
+                model, suggesting they may be outliers or mislabeled.
+              </p>
+              <div className="flex flex-col gap-2">
+                {results.mostOutlier.map((result, idx) => (
+                  <GameCard
+                    key={result.gameIndex}
+                    result={result}
+                    rank={idx + 1}
+                    type="outlier"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -165,18 +177,18 @@ function GameCard({ result, rank, type }: GameCardProps) {
 
   return (
     <div
-      className={`border-2 rounded-lg p-4 ${
+      className={`border-2 rounded-lg p-4 flex flex-col gap-2 ${
         isInfluential
-          ? "border-green-200 bg-green-50"
-          : "border-red-200 bg-red-50"
+          ? "border-success-border bg-success-background"
+          : "border-error-border bg-error-background"
       }`}
     >
-      <div className="flex items-start justify-between mb-2">
+      <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span
               className={`font-bold text-lg ${
-                isInfluential ? "text-green-700" : "text-red-700"
+                isInfluential ? "text-success" : "text-text-error"
               }`}
             >
               #{rank}
@@ -185,35 +197,35 @@ function GameCard({ result, rank, type }: GameCardProps) {
               {game.away_team} @ {game.home_team}
             </h4>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-text-secondary">
             {game.season} Week {game.week}
-            {game.divisional && " • Divisional"}
-            {game.thursday_game && " • Thursday"}
-            {game.international && " • International"}
+            {!!game.divisional && " • Divisional"}
+            {!!game.thursday_game && " • Thursday"}
+            {!!game.international && " • International"}
           </p>
         </div>
         <div className="text-right">
           <div
             className={`text-sm font-mono font-bold ${
-              isInfluential ? "text-green-700" : "text-red-700"
+              isInfluential ? "text-success" : "text-text-error"
             }`}
           >
             {(result.influence * 1000).toFixed(2)}
           </div>
-          <div className="text-xs text-gray-500">Influence (×1000)</div>
+          <div className="text-xs text-text-secondary">Influence (×1000)</div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
         <div className="bg-white p-2 rounded">
-          <div className="text-gray-600 text-xs">Result</div>
+          <div className="text-text-secondary text-xs">Result</div>
           <div className="font-semibold">
             {game.home_win ? "Home Win" : "Away Win"}
           </div>
         </div>
 
         <div className="bg-white p-2 rounded">
-          <div className="text-gray-600 text-xs">Spread</div>
+          <div className="text-text-secondary text-xs">Spread</div>
           <div className="font-semibold font-mono">
             {(game.spread ?? 0 > 0) ? "+" : ""}
             {game.spread?.toFixed(1) ?? "N/A"}
@@ -221,41 +233,41 @@ function GameCard({ result, rank, type }: GameCardProps) {
         </div>
 
         <div className="bg-white p-2 rounded">
-          <div className="text-gray-600 text-xs">Total</div>
+          <div className="text-text-secondary text-xs">Total</div>
           <div className="font-semibold font-mono">
             {game.total?.toFixed(1) ?? "N/A"}
           </div>
         </div>
 
         <div className="bg-white p-2 rounded">
-          <div className="text-gray-600 text-xs">Home Form</div>
+          <div className="text-text-secondary text-xs">Home Form</div>
           <div className="font-semibold font-mono">
             {game.rolling_form_home?.toFixed(3) ?? "N/A"}
           </div>
         </div>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-white p-2 rounded">
-          <span className="text-gray-600">Brier Score Impact:</span>
-          <span className="font-mono font-semibold ml-2">
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="bg-white p-2 rounded flex gap-2">
+          <span className="text-text-secondary">Brier Score Impact:</span>
+          <span className="font-mono font-semibold">
             {result.baselineBrierScore.toFixed(4)} →{" "}
             {result.looBrierScore.toFixed(4)}
           </span>
         </div>
-        <div className="bg-white p-2 rounded">
-          <span className="text-gray-600">Accuracy Impact:</span>
-          <span className="font-mono font-semibold ml-2">
+        <div className="bg-white p-2 rounded flex gap-2">
+          <span className="text-text-secondary">Accuracy Impact:</span>
+          <span className="font-mono font-semibold">
             {(result.accuracyDelta * 100).toFixed(2)}%
           </span>
         </div>
       </div>
 
-      <details className="mt-2">
-        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">
+      <details className="flex flex-col gap-2">
+        <summary className="text-xs text-text-secondary cursor-pointer hover:text-gray-800">
           View all features
         </summary>
-        <div className="mt-2 grid grid-cols-2 gap-2 text-xs bg-white p-2 rounded">
+        <div className="grid grid-cols-2 gap-2 text-xs bg-white p-2 rounded">
           <div>Rest Home: {game.rest_days_home ?? "N/A"}</div>
           <div>Rest Away: {game.rest_days_away ?? "N/A"}</div>
           <div>Form Home: {game.rolling_form_home?.toFixed(3) ?? "N/A"}</div>
