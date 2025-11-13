@@ -227,7 +227,6 @@ function GameCard({ result, rank, type }: GameCardProps) {
         <div className="bg-white p-2 rounded">
           <div className="text-text-secondary text-xs">Spread</div>
           <div className="font-semibold font-mono">
-            {(game.spread ?? 0 > 0) ? "+" : ""}
             {game.spread?.toFixed(1) ?? "N/A"}
           </div>
         </div>

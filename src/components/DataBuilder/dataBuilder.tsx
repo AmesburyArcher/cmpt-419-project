@@ -23,9 +23,9 @@ export function DataBuilder() {
     setProgress("Starting...");
 
     try {
-      const season = 2024;
-      const startWeek = 1;
-      const endWeek = 18;
+      const season = 2025;
+      const startWeek = 9;
+      const endWeek = 10;
 
       setProgress(
         `Fetching data for ${season} season (weeks ${startWeek}-${endWeek})...`,
