@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   buildHistoricalCSV,
   exportToCSV,
@@ -11,11 +11,23 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select.tsx";
+import { SelectValue } from "@radix-ui/react-select";
+import { Label } from "@/components/ui/label.tsx";
 
 export function DataBuilder() {
   const [isBuilding, setIsBuilding] = useState(false);
   const [progress, setProgress] = useState("");
   const [error, setError] = useState("");
+  const [year, setYear] = useState(2024);
+  const [startWeek, setStartWeek] = useState(1);
+  const [endWeek, setEndWeek] = useState(18);
 
   const handleBuildCSV = async () => {
     setIsBuilding(true);
@@ -23,24 +35,21 @@ export function DataBuilder() {
     setProgress("Starting...");
 
     try {
-      const season = 2025;
-      const startWeek = 9;
-      const endWeek = 10;
+      const season = year;
+      const start = startWeek > endWeek ? endWeek : startWeek;
+      const end = endWeek < startWeek ? startWeek : endWeek;
 
       setProgress(
-        `Fetching data for ${season} season (weeks ${startWeek}-${endWeek})...`,
+        `Fetching data for ${season} season (weeks ${start}-${end})...`,
       );
 
-      const games = await buildHistoricalCSV(season, startWeek, endWeek);
+      const games = await buildHistoricalCSV(season, start, end);
 
       setProgress(
         `Successfully fetched ${games.length} games. Generating CSV...`,
       );
 
-      exportToCSV(
-        games,
-        `nfl_data_${season}_weeks_${startWeek}-${endWeek}.csv`,
-      );
+      exportToCSV(games, `nfl_data_${season}_weeks_${start}-${end}.csv`);
 
       setProgress(`✓ CSV downloaded successfully! (${games.length} games)`);
 
@@ -54,6 +63,24 @@ export function DataBuilder() {
     }
   };
 
+  const handleSelectChange = useCallback(
+    (year: string) => {
+      setYear(Number(year));
+    },
+    [setYear],
+  );
+
+  const handleWeekChange = useCallback(
+    (type: "start" | "end", week: number) => {
+      if (type === "start") {
+        setStartWeek(week);
+      } else {
+        setEndWeek(week);
+      }
+    },
+    [setStartWeek, setEndWeek],
+  );
+
   return (
     <Card>
       <CardHeader>
@@ -64,7 +91,43 @@ export function DataBuilder() {
           entire 2024 season.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col justify-center">
+      <CardContent className="flex flex-col gap-2 justify-center">
+        <div className="flex flex-col gap-2">
+          <Label>Select NFL Season</Label>
+          <Select onValueChange={handleSelectChange}>
+            <SelectTrigger>
+              <SelectValue placeholder={"2024"} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={"2023"}>2023</SelectItem>
+              <SelectItem value={"2024"}>2024</SelectItem>
+              <SelectItem value={"2025"}>2025</SelectItem>
+            </SelectContent>
+          </Select>
+          <Label>Select Starting Week</Label>
+
+          <Input
+            type="number"
+            min={1}
+            max={18}
+            placeholder={"1"}
+            onInput={(week) =>
+              handleWeekChange("start", +week.currentTarget.value)
+            }
+          />
+          <Label>Select Ending Week</Label>
+
+          <Input
+            type="number"
+            min={1}
+            max={18}
+            placeholder={"18"}
+            onInput={(week) =>
+              handleWeekChange("end", +week.currentTarget.value)
+            }
+          />
+        </div>
+
         <Button
           onClick={handleBuildCSV}
           disabled={isBuilding}
