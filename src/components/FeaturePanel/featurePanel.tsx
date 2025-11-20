@@ -102,8 +102,8 @@ export function FeaturePanel({
   const categories = [...new Set(AVAILABLE_FEATURES.map((f) => f.category))];
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white rounded-lg shadow p-6 flex flex-col gap-4">
+      <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Step 2: Feature Selection</h2>
         <label className="flex items-center gap-2 text-sm">
           <input
@@ -116,22 +116,24 @@ export function FeaturePanel({
         </label>
       </div>
 
-      <p className="text-gray-600 mb-4">
+      <p className="text-text-secondary">
         Select which features to include in the model. Changes will retrain the
         model automatically.
       </p>
 
       {isTraining && (
-        <div className="mb-4 flex items-center gap-2 text-blue-600 bg-blue-50 p-3 rounded">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+        <div className="flex items-center gap-2 text-text-accent bg-accent-secondary p-3 rounded">
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-text-accent"></div>
           <span>Retraining model with new features...</span>
         </div>
       )}
 
-      <div className="space-y-6">
+      <div className="flex flex-col gap-6">
         {categories.map((category) => (
-          <div key={category}>
-            <h3 className="font-semibold text-gray-700 mb-2">{category}</h3>
+          <div className="flex flex-col gap-2" key={category}>
+            <h3 className="font-semibold text-text-secondary mb-2">
+              {category}
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {AVAILABLE_FEATURES.filter((f) => f.category === category).map(
                 (feature) => (
@@ -142,7 +144,7 @@ export function FeaturePanel({
                       transition-colors
                       ${
                         selectedFeatures.includes(feature.key)
-                          ? "border-blue-500 bg-blue-50"
+                          ? "border-text-accent bg-accent-secondary"
                           : "border-gray-200 hover:border-gray-300"
                       }
                       ${isTraining ? "opacity-50 cursor-not-allowed" : ""}
@@ -164,7 +166,7 @@ export function FeaturePanel({
         ))}
       </div>
 
-      <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
+      <div className="flex items-center gap-2 text-sm text-text-secondary">
         <span className="font-semibold">Selected:</span>
         <span>{selectedFeatures.length} features</span>
       </div>
