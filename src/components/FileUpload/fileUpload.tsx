@@ -158,9 +158,9 @@ export function FileUpload({
         <div className="bg-accent-secondary p-4 rounded text-sm flex flex-col gap-2">
           <p className="font-semibold">Expected CSV format:</p>
           <code className="text-xs bg-white p-2 block rounded">
-            season,week,home_team,away_team,home_win,spread,total,
-            rest_days_home,rest_days_away,rolling_form_home,rolling_form_away,
-            divisional,thursday_game,international,travel_miles
+            season, week, home_team, away_team, spread, total, rest_days_home,
+            rest_days_away, rolling_form_home, rolling_form_away, divisional,
+            thursday_game, international, travel_miles
           </code>
         </div>
       </CardContent>
