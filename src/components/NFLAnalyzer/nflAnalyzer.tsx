@@ -9,6 +9,7 @@ import { UpcomingGames } from "@/components/UpcomingGames";
 import { DataBuilder } from "@/components/DataBuilder";
 import { LOOAnalysis } from "@/components/LOOAnalysis";
 import { TrainTestSettings } from "@/components/TrainTestSettings";
+import { FeatureImportance } from "@/components/FeatureImportance";
 
 export function NFLAnalyzer() {
   const [historicalGames, setHistoricalGames] = useState<NflGameInterface[]>(
@@ -91,15 +92,13 @@ export function NFLAnalyzer() {
               <section className="flex flex-col gap-6">
                 <ModelMetrics metrics={metrics} />
                 <CalibrationChart calibrationData={metrics.calibrationData} />
+                <FeatureImportance model={model} />
+                <LOOAnalysis
+                  historicalGames={historicalGames}
+                  selectedFeatures={selectedFeatures}
+                />
               </section>
             )}
-
-            <section>
-              <LOOAnalysis
-                historicalGames={historicalGames}
-                selectedFeatures={selectedFeatures}
-              />
-            </section>
 
             {model && (
               <section>

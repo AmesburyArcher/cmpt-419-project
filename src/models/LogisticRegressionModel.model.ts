@@ -101,7 +101,6 @@ export class LogisticRegressionModel {
 
   /**
    * Get feature importance (coefficients from the model)
-   * Useful for understanding which features are most influential
    */
   getFeatureImportance(): Array<{ feature: string; coefficient: number }> {
     if (!this.model) throw new Error("Model not trained");
