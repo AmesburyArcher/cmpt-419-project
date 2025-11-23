@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NflGameInterface } from "@/interfaces/nflGame.interface.ts";
 import { LogisticRegressionModel } from "@/models/LogisticRegressionModel.model.ts";
+import { SavedModelMetadata } from "@/interfaces/savedModel.interface";
 import { FileUpload } from "@/components/FileUpload";
 import { FeaturePanel } from "@/components/FeaturePanel";
 import { ModelMetrics } from "@/components/ModelMetrics/modelMetrics.tsx";
@@ -8,6 +9,7 @@ import { CalibrationChart } from "@/components/CalibrationCharts";
 import { UpcomingGames } from "@/components/UpcomingGames";
 import { DataBuilder } from "@/components/DataBuilder";
 import { LOOAnalysis } from "@/components/LOOAnalysis";
+import { ModelManager } from "@/components/ModelManager";
 import { TrainTestSettings } from "@/components/TrainTestSettings";
 import { FeatureImportance } from "@/components/FeatureImportance";
 
@@ -26,6 +28,8 @@ export function NFLAnalyzer() {
     "rolling_form_away",
   ]);
   const [isTraining, setIsTraining] = useState(false);
+  const [loadedModelMetadata, setLoadedModelMetadata] =
+    useState<SavedModelMetadata | null>(null);
 
   const [trainTestSettings, setTrainTestSettings] = useState<TrainTestSettings>(
     {
@@ -49,11 +53,44 @@ export function NFLAnalyzer() {
     }>;
   } | null>(null);
 
+  const handleLoadSavedModel = (
+    loadedModel: LogisticRegressionModel,
+    metadata: SavedModelMetadata,
+  ) => {
+    setModel(loadedModel);
+    setSelectedFeatures(metadata.features);
+    setTrainTestSettings(metadata.trainTestSettings);
+    setLoadedModelMetadata(metadata);
+    setModelVersion((v) => v + 1);
+
+    // Set metrics from saved metadata
+    // Note: calibrationData is not saved, so we pass empty array
+    setMetrics({
+      accuracy: metadata.metrics.testAccuracy,
+      brierScore: metadata.metrics.testBrierScore,
+      trainAccuracy: metadata.metrics.trainAccuracy,
+      valAccuracy: metadata.metrics.valAccuracy,
+      calibrationData: [],
+    });
+  };
+
   return (
     <div>
       <div className="max-w-7xl mx-auto p-6 flex flex-col gap-8">
         <section>
           <DataBuilder />
+        </section>
+
+        <section>
+          <ModelManager
+            currentModel={model}
+            currentMetrics={metrics}
+            selectedFeatures={selectedFeatures}
+            trainTestSettings={trainTestSettings}
+            historicalGames={historicalGames}
+            onLoadModel={handleLoadSavedModel}
+            onHistoricalGamesLoad={setHistoricalGames}
+          />
         </section>
 
         <section>
@@ -63,6 +100,7 @@ export function NFLAnalyzer() {
               setModel(trainedModel);
               setMetrics(trainingMetrics);
               setModelVersion((v) => v + 1);
+              setLoadedModelMetadata(null); // Clear loaded model metadata when training new
             }}
             selectedFeatures={selectedFeatures}
             isTraining={isTraining}
@@ -81,6 +119,7 @@ export function NFLAnalyzer() {
                   setModel(trainedModel);
                   setMetrics(trainingMetrics);
                   setModelVersion((v) => v + 1);
+                  setLoadedModelMetadata(null); // Clear loaded model metadata when retraining
                 }}
                 isTraining={isTraining}
                 setIsTraining={setIsTraining}
@@ -91,7 +130,9 @@ export function NFLAnalyzer() {
             {metrics && (
               <section className="flex flex-col gap-6">
                 <ModelMetrics metrics={metrics} />
-                <CalibrationChart calibrationData={metrics.calibrationData} />
+                {metrics.calibrationData.length > 0 && (
+                  <CalibrationChart calibrationData={metrics.calibrationData} />
+                )}
                 <FeatureImportance model={model} />
                 <LOOAnalysis
                   historicalGames={historicalGames}
