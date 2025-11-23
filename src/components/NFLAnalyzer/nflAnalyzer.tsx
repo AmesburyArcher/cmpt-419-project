@@ -63,14 +63,12 @@ export function NFLAnalyzer() {
     setLoadedModelMetadata(metadata);
     setModelVersion((v) => v + 1);
 
-    // Set metrics from saved metadata
-    // Note: calibrationData is not saved, so we pass empty array
     setMetrics({
       accuracy: metadata.metrics.testAccuracy,
       brierScore: metadata.metrics.testBrierScore,
       trainAccuracy: metadata.metrics.trainAccuracy,
       valAccuracy: metadata.metrics.valAccuracy,
-      calibrationData: [],
+      calibrationData: metadata.calibrationData,
     });
   };
 
@@ -100,7 +98,7 @@ export function NFLAnalyzer() {
               setModel(trainedModel);
               setMetrics(trainingMetrics);
               setModelVersion((v) => v + 1);
-              setLoadedModelMetadata(null); // Clear loaded model metadata when training new
+              setLoadedModelMetadata(null);
             }}
             selectedFeatures={selectedFeatures}
             isTraining={isTraining}
@@ -119,7 +117,7 @@ export function NFLAnalyzer() {
                   setModel(trainedModel);
                   setMetrics(trainingMetrics);
                   setModelVersion((v) => v + 1);
-                  setLoadedModelMetadata(null); // Clear loaded model metadata when retraining
+                  setLoadedModelMetadata(null);
                 }}
                 isTraining={isTraining}
                 setIsTraining={setIsTraining}

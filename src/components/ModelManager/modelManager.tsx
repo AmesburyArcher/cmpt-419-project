@@ -22,6 +22,11 @@ interface ModelManagerProps {
     brierScore: number;
     trainAccuracy?: number;
     valAccuracy?: number;
+    calibrationData: Array<{
+      predictedProb: number;
+      actualProb: number;
+      count: number;
+    }>;
   } | null;
   selectedFeatures: string[];
   trainTestSettings: TrainTestSettings;
@@ -95,6 +100,7 @@ export function ModelManager({
           weekRange: { min: Math.min(...weeks), max: Math.max(...weeks) },
         },
         historicalGames, // Save the historical games data
+        calibrationData: currentMetrics.calibrationData, // Save calibration data
       };
 
       await modelStorage.saveModel(currentModel, metadata);
@@ -145,14 +151,12 @@ export function ModelManager({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
-        {/* Error Display */}
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded border border-red-200">
+          <div className="bg-error-background text-text-error p-3 rounded border border-error-border">
             {error}
           </div>
         )}
 
-        {/* Save Current Model */}
         <div className="flex flex-col gap-2">
           <Label className="text-base font-semibold">Save Current Model</Label>
           <p className="text-sm text-text-secondary mb-2">
@@ -187,20 +191,19 @@ export function ModelManager({
             </Button>
           </div>
           {!currentModel && (
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-text-secondary">
               Train a model first before you can save it
             </p>
           )}
         </div>
 
-        {/* Load Saved Models */}
         <div className="flex flex-col gap-3">
           <Label className="text-base font-semibold">
             Saved Models ({savedModels.length})
           </Label>
           {savedModels.length === 0 ? (
             <div className="text-center py-8 border-2 border-dashed rounded-lg">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-text-secondary">
                 No saved models yet. Train and save a model to get started.
               </p>
             </div>
@@ -213,32 +216,33 @@ export function ModelManager({
                 >
                   <div className="flex-1">
                     <p className="font-medium text-base">{model.name}</p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-text-secondary mt-1">
                       Saved: {new Date(model.createdAt).toLocaleString()} •{" "}
                       {model.features.length} features •{" "}
                       {model.trainingDataInfo.gameCount} games
                     </p>
                     <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs">
-                      <span className="text-gray-600">
-                        <strong>Accuracy:</strong>{" "}
+                      <span className="text-text-secondary">
+                        <span className="font-bold">Accuracy:</span>{" "}
                         {(model.metrics.testAccuracy * 100).toFixed(1)}%
                       </span>
-                      <span className="text-gray-600">
-                        <strong>Brier:</strong>{" "}
+                      <span className="text-text-secondary">
+                        <span className="font-bold">Brier:</span>{" "}
                         {model.metrics.testBrierScore.toFixed(4)}
                       </span>
-                      <span className="text-gray-600">
-                        <strong>Seasons:</strong>{" "}
+                      <span className="text-text-secondary">
+                        <span className="font-bold">Seasons:</span>{" "}
                         {model.trainingDataInfo.seasons.join(", ")}
                       </span>
-                      <span className="text-gray-600">
-                        <strong>Weeks:</strong>{" "}
+                      <span className="text-text-secondary">
+                        <span className="font-bold">Weeks:</span>{" "}
                         {model.trainingDataInfo.weekRange.min}-
                         {model.trainingDataInfo.weekRange.max}
                       </span>
                     </div>
-                    <div className="mt-2 text-xs text-gray-500">
-                      <strong>Features:</strong> {model.features.join(", ")}
+                    <div className="mt-2 text-xs text-text-secondary">
+                      <span className="font-bold">Features:</span>{" "}
+                      {model.features.join(", ")}
                     </div>
                   </div>
                   <div className="flex gap-2 ml-4">
