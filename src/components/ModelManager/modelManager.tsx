@@ -99,8 +99,8 @@ export function ModelManager({
           seasons,
           weekRange: { min: Math.min(...weeks), max: Math.max(...weeks) },
         },
-        historicalGames, // Save the historical games data
-        calibrationData: currentMetrics.calibrationData, // Save calibration data
+        historicalGames,
+        calibrationData: currentMetrics.calibrationData,
       };
 
       await modelStorage.saveModel(currentModel, metadata);
@@ -120,7 +120,7 @@ export function ModelManager({
 
     try {
       const { model, metadata } = await modelStorage.loadModel(id);
-      onHistoricalGamesLoad(metadata.historicalGames); // Load the historical games
+      onHistoricalGamesLoad(metadata.historicalGames);
       onLoadModel(model, metadata);
     } catch (error) {
       console.error("Failed to load model:", error);
