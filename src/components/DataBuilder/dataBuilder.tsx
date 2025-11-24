@@ -88,7 +88,7 @@ export function DataBuilder() {
         <CardDescription>
           Automatically fetch real NFL game data from ESPN's API. This will
           download a CSV with scores, teams, and calculated features for the
-          entire 2024 season.
+          selected season.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2 justify-center">
