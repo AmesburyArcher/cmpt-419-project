@@ -1,5 +1,8 @@
 # Instructions To Run App
 
+## Clone The Repo
+This app has not been deployed, so you must clone the repo and run it locally.
+
 ## Configure .env File:
 
 In order for the app to work, a .env file needs to be added to root level of the repo /cmpt-419-project.
