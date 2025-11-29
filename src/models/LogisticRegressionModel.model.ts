@@ -38,13 +38,6 @@ export class LogisticRegressionModel {
       epochs,
       batchSize: 32,
       validationSplit: 0.2,
-      callbacks: {
-        onEpochEnd: (epoch, logs) => {
-          console.log(
-            `Epoch ${epoch}: loss = ${logs?.loss.toFixed(4)}, val_loss = ${logs?.val_loss?.toFixed(4)}`,
-          );
-        },
-      },
     });
 
     const finalEpoch = history.history.loss.length - 1;
